@@ -10,7 +10,7 @@ body {
     color: #f0f0f0;
     height: 100vh;
     height: -webkit-fill-available;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     touch-action: none;
@@ -26,14 +26,14 @@ body {
     max-width: 500px;
     margin: 0 auto;
     width: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
 }
 
 .header {
     text-align: center;
     margin-bottom: 20px;
     position: relative;
+    flex-shrink: 0;
 }
 
 .fullscreen-button {
@@ -67,8 +67,9 @@ body {
 .compass-container {
     position: relative;
     width: 100%;
-    padding-bottom: 100%;
+    aspect-ratio: 1;
     margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .compass {
@@ -119,6 +120,7 @@ body {
 
 .distance-container {
     margin: 20px 0;
+    flex-shrink: 0;
 }
 
 .distance-label {
@@ -186,6 +188,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .primary-button {
@@ -231,6 +234,7 @@ body {
     background-color: #2a2a2a;
     border-radius: 8px;
     display: none;
+    flex-shrink: 0;
 }
 
 .result-container h2 {
@@ -258,6 +262,7 @@ body {
     color: #b0b0b0;
     text-align: center;
     margin-top: 10px;
+    flex-shrink: 0;
 }
 
 .highlight {
