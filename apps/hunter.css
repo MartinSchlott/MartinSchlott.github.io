@@ -9,10 +9,12 @@ body {
     background-color: #3a3a3a;
     color: #f0f0f0;
     height: 100vh;
-    overflow: hidden;
+    height: -webkit-fill-available;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     touch-action: none;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .app-container {
@@ -20,9 +22,12 @@ body {
     flex-direction: column;
     height: 100%;
     padding: 20px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
     max-width: 500px;
     margin: 0 auto;
     width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .header {
