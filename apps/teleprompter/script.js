@@ -34,12 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const MIN_FONT_SIZE = 12;
     const MAX_FONT_SIZE = 72;
     const FONT_SIZE_STEP = 2; // Schrittweite für Schriftgrößenänderung
+    const MANUAL_SCROLL_AMOUNT = 100; // Pixelwert für manuelles Scrollen (Links/Rechts Pfeiltasten)
 
     // Player State
     let currentSpeed = DEFAULT_SPEED;
     let currentFontSize = DEFAULT_FONT_SIZE;
     let isPlaying = false;
     let animationFrameId = null;
+    let isPanelVisible = true; // State für Sichtbarkeit des Control Panels
 
     // --- Funktionen ---
 
@@ -69,6 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isPlaying) {
             stopScrolling(); // Wichtig: Scrolling stoppen beim Verlassen
         }
+        // Vollbild verlassen, wenn aktiv
+        if (document.fullscreenElement) {
+            exitFullscreen();
+        }
         playMode.classList.add('hidden');
         controlsPanel.classList.add('controls-hidden');
         editMode.classList.remove('hidden');
@@ -88,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isPlaying = false;
         currentSpeed = DEFAULT_SPEED;
         currentFontSize = DEFAULT_FONT_SIZE;
+        isPanelVisible = true;
         
         // Aktualisiere die Anzeigen
         updateSpeed(0);
@@ -212,6 +219,82 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Schriftgröße auf", currentFontSize, "px gesetzt");
     }
 
+    /**
+     * Manuelles Scrollen (für Links/Rechts Pfeiltasten)
+     * @param {number} amount - Zu scrollende Menge (positiv=runter, negativ=hoch)
+     */
+    function manualScroll(amount) {
+        // Wenn automatisches Scrollen läuft, stoppen
+        if (isPlaying) {
+            stopScrolling();
+        }
+        
+        // Scroll sicher innerhalb der Grenzen halten
+        const newScrollPos = prompterDisplay.scrollTop + amount;
+        const maxScroll = prompterDisplay.scrollHeight - prompterDisplay.clientHeight;
+        
+        // Clamp zwischen 0 und maxScroll
+        prompterDisplay.scrollTop = Math.max(0, Math.min(newScrollPos, maxScroll));
+    }
+
+    /**
+     * Umschalten der Panel-Sichtbarkeit
+     */
+    function toggleControlsPanel() {
+        isPanelVisible = !isPanelVisible;
+        
+        if (isPanelVisible) {
+            controlsPanel.classList.remove('controls-hidden');
+        } else {
+            controlsPanel.classList.add('controls-hidden');
+        }
+    }
+
+    /**
+     * Vollbildmodus einschalten
+     */
+    function enterFullscreen() {
+        if (mainElement.requestFullscreen) {
+            mainElement.requestFullscreen();
+        } else if (mainElement.webkitRequestFullscreen) { /* Safari */
+            mainElement.webkitRequestFullscreen();
+        } else if (mainElement.msRequestFullscreen) { /* IE11 */
+            mainElement.msRequestFullscreen();
+        }
+        
+        // Icon aktualisieren
+        fullscreenIcon.classList.remove('ph-arrows-out');
+        fullscreenIcon.classList.add('ph-arrows-in');
+    }
+
+    /**
+     * Vollbildmodus ausschalten
+     */
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+        
+        // Icon aktualisieren
+        fullscreenIcon.classList.remove('ph-arrows-in');
+        fullscreenIcon.classList.add('ph-arrows-out');
+    }
+
+    /**
+     * Umschalten des Vollbildmodus
+     */
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            enterFullscreen();
+        } else {
+            exitFullscreen();
+        }
+    }
+
 
     // --- Event Listeners ---
     startButton.addEventListener('click', showPlayMode);
@@ -225,7 +308,56 @@ document.addEventListener('DOMContentLoaded', () => {
     speedDownButton.addEventListener('click', () => updateSpeed(-1));
     fontUpButton.addEventListener('click', () => updateFontSize(FONT_SIZE_STEP));
     fontDownButton.addEventListener('click', () => updateFontSize(-FONT_SIZE_STEP));
+    fullscreenButton.addEventListener('click', toggleFullscreen);
 
+    // Listener für das Umschalten des Control Panels
+    prompterDisplay.addEventListener('click', toggleControlsPanel);
+
+    // Globaler Keyboard Listener (nur für Play-Modus)
+    document.addEventListener('keydown', (event) => {
+        // Nur reagieren, wenn wir im Play-Modus sind
+        if (playMode.classList.contains('hidden')) return;
+        
+        switch (event.key) {
+            case 'Enter':
+                togglePlayPause();
+                break;
+            case 'ArrowUp':
+                updateSpeed(1);
+                break;
+            case 'ArrowDown':
+                updateSpeed(-1);
+                break;
+            case 'ArrowRight':
+                manualScroll(MANUAL_SCROLL_AMOUNT);
+                break;
+            case 'ArrowLeft':
+                manualScroll(-MANUAL_SCROLL_AMOUNT);
+                break;
+            case 'f':
+                toggleFullscreen();
+                break;
+            case 'Escape':
+                // Bei ESC, wenn im Vollbild, Vollbild verlassen, sonst zurück zum Editor
+                if (document.fullscreenElement) {
+                    exitFullscreen();
+                } else {
+                    showEditMode();
+                }
+                break;
+        }
+    });
+
+    // Fullscreen Change Event Listener
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            fullscreenIcon.classList.remove('ph-arrows-out');
+            fullscreenIcon.classList.add('ph-arrows-in');
+        } else {
+            fullscreenIcon.classList.remove('ph-arrows-in');
+            fullscreenIcon.classList.add('ph-arrows-out');
+        }
+    });
 
     // --- Initialisierung ---
     loadText();

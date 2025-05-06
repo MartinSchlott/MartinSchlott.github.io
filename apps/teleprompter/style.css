@@ -94,6 +94,7 @@ main.play-active {
     line-height: 1.8;
     text-align: center;
     white-space: pre-wrap;
+    cursor: pointer; /* Zeigt an, dass es klickbar ist */
 }
 
 #controls-panel {
@@ -172,4 +173,63 @@ button:hover {
     padding: 5px 8px;
     border-radius: 4px;
     font-size: 0.9em;
+}
+
+/* Responsive Anpassungen für kleinere Geräte */
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+    }
+    
+    main {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 10px;
+    }
+    
+    #edit-mode #text-input {
+        min-height: 50vh; /* Mehr Platz auf Mobilgeräten für Texteingabe */
+    }
+    
+    #controls-panel {
+        flex-wrap: wrap;
+        padding: 10px 5px;
+        gap: 10px;
+    }
+    
+    #controls-panel button {
+        width: 42px;
+        height: 42px;
+    }
+    
+    #controls-panel button i.ph {
+        font-size: 1.5em;
+    }
+    
+    .status-display {
+        min-width: 35px;
+        font-size: 0.8em;
+    }
+    
+    #prompter-display {
+        padding: 20px 10px;
+    }
+}
+
+/* Besser für kleine Screens */
+@media (max-width: 480px) {
+    #controls-panel {
+        padding: 8px 4px;
+        gap: 5px;
+    }
+    
+    #controls-panel button {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+/* Hilfsklasse für Touch-optimierte Bereiche */
+.touch-target {
+    min-height: 44px; /* Empfohlene Mindestgröße für Touch-Targets */
 }
