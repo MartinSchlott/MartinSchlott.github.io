@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einfacher Teleprompter</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/css/phosphor.min.css">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <main>
+        <div id="edit-mode" class="mode-view">
+            <h2>Text eingeben oder laden</h2>
+            <textarea id="text-input" placeholder="Hier deinen Text einfügen..."></textarea>
+            <div class="button-bar">
+                <button id="load-button" title="Text aus Browser-Speicher laden">
+                    <i class="ph ph-upload-simple"></i> Laden
+                </button>
+                <button id="save-button" title="Text im Browser speichern">
+                    <i class="ph ph-floppy-disk"></i> Speichern
+                </button>
+                <button id="start-button" title="Teleprompter starten">
+                    <i class="ph ph-play"></i> Starten
+                </button>
+            </div>
+        </div>
+
+        <div id="play-mode" class="mode-view hidden">
+            <div id="prompter-display">
+                Hier wird der Text angezeigt...
+            </div>
+
+            <div id="controls-panel">
+                <button id="edit-button" title="Zurück zum Editor">
+                    <i class="ph ph-pencil-simple"></i>
+                </button>
+                <button id="speed-down-button" title="Geschwindigkeit verringern (Pfeil runter)">
+                    <i class="ph ph-rewind"></i>
+                </button>
+                <span id="speed-display" class="status-display">5</span> <button id="speed-up-button" title="Geschwindigkeit erhöhen (Pfeil hoch)">
+                    <i class="ph ph-fast-forward"></i>
+                </button>
+                <button id="play-pause-button" title="Play / Pause (Enter)">
+                    <i id="play-pause-icon" class="ph ph-play"></i> </button>
+                <button id="font-down-button" title="Schriftgröße verkleinern">
+                    <i class="ph ph-text-a-underline"></i> <span style="font-size: 0.8em;">A-</span>
+                </button>
+                 <span id="font-display" class="status-display">24px</span> <button id="font-up-button" title="Schriftgröße vergrößern">
+                    <i class="ph ph-text-a-underline"></i>
+                     <span style="font-size: 1.2em;">A+</span>
+                </button>
+                <button id="fullscreen-button" title="Vollbildmodus an/aus">
+                    <i id="fullscreen-icon" class="ph ph-arrows-out"></i> </button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
