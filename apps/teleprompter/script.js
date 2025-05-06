@@ -134,9 +134,14 @@ document.addEventListener('DOMContentLoaded', () => {
      * Wird wiederholt durch requestAnimationFrame aufgerufen.
      */
     function scrollText() {
-        // Berechnung der Scroll-Distanz für diesen Frame
-        // Stärkere Unterschiede zwischen den Geschwindigkeitsstufen
-        const scrollAmount = currentSpeed * 1; // Erhöht für deutlichere Unterschiede
+        // Berechnung der Scroll-Distanz für diesen Frame mit exponentieller Skala 
+        // für größere Unterschiede zwischen niedrigen und hohen Geschwindigkeiten
+        
+        // Exponentieller Faktor für stärkere Unterschiede (insb. bei niedrigen Geschwindigkeiten)
+        // Werte von 1-10 werden quadratisch skaliert, sodass 1 sehr langsam und 10 deutlich schneller ist
+        const speedFactor = (currentSpeed * currentSpeed) / 20;
+        const baseSpeed = 0.15; // Sehr niedrige Basisgeschwindigkeit für Stufe 1
+        const scrollAmount = baseSpeed + speedFactor;
 
         prompterDisplay.scrollTop += scrollAmount;
 
