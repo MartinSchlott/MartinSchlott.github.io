@@ -35,6 +35,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const MAX_FONT_SIZE = 72;
     const FONT_SIZE_STEP = 2; // Schrittweite für Schriftgrößenänderung
     const MANUAL_SCROLL_AMOUNT = 100; // Pixelwert für manuelles Scrollen (Links/Rechts Pfeiltasten)
+    const BASE_SPEED_MS = 30; // Millisekunden zwischen Updates bei Geschwindigkeit 5
+    
+    // Lookup-Tabelle für Scrollgeschwindigkeiten in Pixel pro Sekunde
+    const SPEED_TABLE = {
+        1: 5,    // Sehr langsam: 5px/Sekunde
+        2: 10,   // 10px/Sekunde
+        3: 20,   // 20px/Sekunde
+        4: 35,   // 35px/Sekunde
+        5: 55,   // 55px/Sekunde
+        6: 85,   // 85px/Sekunde
+        7: 130,  // 130px/Sekunde
+        8: 190,  // 190px/Sekunde
+        9: 270,  // 270px/Sekunde
+        10: 400  // Sehr schnell: 400px/Sekunde
+    };
 
     // Player State
     let currentSpeed = DEFAULT_SPEED;
@@ -42,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let isPlaying = false;
     let animationFrameId = null;
     let isPanelVisible = true; // State für Sichtbarkeit des Control Panels
+    let scrollPosition = 0; // Aktuelle Scroll-Position in Pixeln
+    let lastTimestamp = 0; // Letzter Zeitstempel für Animation
 
     // --- Funktionen ---
 
@@ -95,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSpeed = DEFAULT_SPEED;
         currentFontSize = DEFAULT_FONT_SIZE;
         isPanelVisible = true;
+        scrollPosition = 0;
         
         // Aktualisiere die Anzeigen
         updateSpeed(0);
@@ -131,30 +149,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Die Hauptfunktion für die Scroll-Animation.
-     * Wird wiederholt durch requestAnimationFrame aufgerufen.
+     * Verwendet requestAnimationFrame und berechnet Positionen basierend auf verstrichener Zeit.
+     * @param {number} timestamp - Vom Browser bereitgestellter Zeitstempel
      */
-    function scrollText() {
-        // Berechnung der Scroll-Distanz für diesen Frame mit exponentieller Skala 
-        // für größere Unterschiede zwischen niedrigen und hohen Geschwindigkeiten
+    function scrollText(timestamp) {
+        if (!isPlaying) return;
         
-        // Exponentieller Faktor für stärkere Unterschiede (insb. bei niedrigen Geschwindigkeiten)
-        // Werte von 1-10 werden quadratisch skaliert, sodass 1 sehr langsam und 10 deutlich schneller ist
-        const speedFactor = (currentSpeed * currentSpeed) / 20;
-        const baseSpeed = 0.15; // Sehr niedrige Basisgeschwindigkeit für Stufe 1
-        const scrollAmount = baseSpeed + speedFactor;
-
-        prompterDisplay.scrollTop += scrollAmount;
-
-        // Prüfen, ob das Ende erreicht ist
-        // Kleine Toleranz eingebaut (>= -1), um Rundungsfehler abzufangen
-        const remainingScroll = prompterDisplay.scrollHeight - prompterDisplay.clientHeight - prompterDisplay.scrollTop;
-        if (remainingScroll <= 1) { // Ende erreicht oder fast erreicht
-             console.log("Ende erreicht");
-             stopScrolling(); // Stoppt Animation und setzt Button zurück
-        } else if (isPlaying) {
-            // Nur weitermachen, wenn wir noch im Play-Status sind
+        // Wenn es der erste Frame ist, Zeitstempel merken und nächsten Frame anfordern
+        if (!lastTimestamp) {
+            lastTimestamp = timestamp;
             animationFrameId = requestAnimationFrame(scrollText);
+            return;
         }
+        
+        // Zeit seit letztem Frame berechnen (in Sekunden)
+        const deltaTime = (timestamp - lastTimestamp) / 1000;
+        lastTimestamp = timestamp;
+        
+        // Scroll-Distanz für diesen Frame basierend auf verstrichener Zeit und Geschwindigkeit
+        const pixelsPerSecond = SPEED_TABLE[currentSpeed];
+        const scrollAmount = pixelsPerSecond * deltaTime;
+        
+        // Neue Position berechnen
+        scrollPosition += scrollAmount;
+        
+        // Begrenzen auf die Maximalhöhe des Inhalts
+        const maxScroll = prompterDisplay.scrollHeight - prompterDisplay.clientHeight;
+        
+        // Prüfen, ob das Ende erreicht ist
+        if (scrollPosition >= maxScroll) {
+            scrollPosition = maxScroll;
+            prompterDisplay.scrollTop = scrollPosition;
+            console.log("Ende erreicht");
+            stopScrolling();
+            return;
+        }
+        
+        // Scrollposition anwenden (Math.floor für Browsers, die keine Subpixel-Scrolling unterstützen)
+        prompterDisplay.scrollTop = Math.floor(scrollPosition);
+        
+        // Nächsten Frame anfordern
+        animationFrameId = requestAnimationFrame(scrollText);
     }
 
     /**
@@ -162,19 +197,25 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function startScrolling() {
         if (isPlaying) return; // Nicht starten, wenn schon läuft
-
-         // Prüfen, ob wir schon am Ende sind, bevor wir starten
-        const remainingScroll = prompterDisplay.scrollHeight - prompterDisplay.clientHeight - prompterDisplay.scrollTop;
-         if (remainingScroll <= 1) {
+        
+        // Aktuelle Scroll-Position erfassen
+        scrollPosition = prompterDisplay.scrollTop;
+        
+        // Prüfen, ob wir schon am Ende sind, bevor wir starten
+        const maxScroll = prompterDisplay.scrollHeight - prompterDisplay.clientHeight;
+        if (scrollPosition >= maxScroll) {
             console.log("Bereits am Ende, nicht starten.");
             return;
-         }
+        }
 
         isPlaying = true;
+        lastTimestamp = 0; // Zeitstempel zurücksetzen
+        
         playPauseIcon.classList.remove('fa-play');
         playPauseIcon.classList.add('fa-pause');
         playPauseIcon.classList.remove('icon-play');
         playPauseIcon.classList.add('icon-pause');
+        
         console.log("Starte Scrolling");
         animationFrameId = requestAnimationFrame(scrollText); // Starte die Schleife
     }
@@ -186,14 +227,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isPlaying && animationFrameId === null) return; // Nicht stoppen, wenn nicht läuft
 
         isPlaying = false;
+        lastTimestamp = 0; // Zeitstempel zurücksetzen
+        
         playPauseIcon.classList.remove('fa-pause');
         playPauseIcon.classList.add('fa-play');
         playPauseIcon.classList.remove('icon-pause');
         playPauseIcon.classList.add('icon-play');
+        
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId); // Stoppe die Schleife
             animationFrameId = null;
         }
+        
+        // Aktuelle Scrollposition sichern
+        scrollPosition = prompterDisplay.scrollTop;
+        
         console.log("Stoppe Scrolling");
     }
 
@@ -240,12 +288,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function manualScroll(amount) {
         // Manuelles Scrollen sollte das automatische Scrollen NICHT stoppen
         
-        // Scroll sicher innerhalb der Grenzen halten
-        const newScrollPos = prompterDisplay.scrollTop + amount;
-        const maxScroll = prompterDisplay.scrollHeight - prompterDisplay.clientHeight;
+        // Aktuelle Position aktualisieren (falls Animation läuft)
+        if (isPlaying) {
+            scrollPosition = prompterDisplay.scrollTop;
+        }
         
-        // Clamp zwischen 0 und maxScroll
-        prompterDisplay.scrollTop = Math.max(0, Math.min(newScrollPos, maxScroll));
+        // Neue Position berechnen
+        scrollPosition += amount;
+        
+        // Grenzen prüfen
+        const maxScroll = prompterDisplay.scrollHeight - prompterDisplay.clientHeight;
+        scrollPosition = Math.max(0, Math.min(scrollPosition, maxScroll));
+        
+        // Anwenden
+        prompterDisplay.scrollTop = scrollPosition;
     }
 
     /**
