@@ -5,10 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Einfacher Teleprompter</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/css/phosphor.min.css">
+    <!-- Font Awesome für zuverlässige Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fallback für Icons falls auch Font Awesome nicht laden sollte -->
+    <style>
+        /* Ersatz-Zeichenfolgen für Icons, wenn Icons nicht laden */
+        .icon-play::before { content: "▶"; }
+        .icon-pause::before { content: "⏸"; }
+        .icon-upload::before { content: "↑"; }
+        .icon-save::before { content: "💾"; }
+        .icon-edit::before { content: "✎"; }
+        .icon-speed-down::before { content: "◀"; }
+        .icon-speed-up::before { content: "▶"; }
+        .icon-font::before { content: "A"; } 
+        .icon-fullscreen::before { content: "⛶"; }
+        .icon-exit-fullscreen::before { content: "⮽"; }
+    </style>
 
     <link rel="stylesheet" href="style.css">
-
     <script src="script.js" defer></script>
 </head>
 <body>
@@ -18,13 +33,13 @@
             <textarea id="text-input" placeholder="Hier deinen Text einfügen..."></textarea>
             <div class="button-bar">
                 <button id="load-button" title="Text aus Browser-Speicher laden">
-                    <i class="ph ph-upload-simple"></i> Laden
+                    <i class="fas fa-upload icon-upload"></i> Laden
                 </button>
                 <button id="save-button" title="Text im Browser speichern">
-                    <i class="ph ph-floppy-disk"></i> Speichern
+                    <i class="fas fa-save icon-save"></i> Speichern
                 </button>
                 <button id="start-button" title="Teleprompter starten">
-                    <i class="ph ph-play"></i> Starten
+                    <i class="fas fa-play icon-play"></i> Starten
                 </button>
             </div>
         </div>
@@ -36,28 +51,28 @@
 
             <div id="controls-panel">
                 <button id="edit-button" title="Zurück zum Editor">
-                    <i class="ph ph-pencil-simple"></i>
+                    <i class="fas fa-edit icon-edit"></i>
                 </button>
                 <button id="speed-down-button" title="Geschwindigkeit verringern (Pfeil runter)">
-                    <i class="ph ph-rewind"></i>
+                    <i class="fas fa-backward icon-speed-down"></i>
                 </button>
                 <span id="speed-display" class="status-display">5</span> 
                 <button id="speed-up-button" title="Geschwindigkeit erhöhen (Pfeil hoch)">
-                    <i class="ph ph-fast-forward"></i>
+                    <i class="fas fa-forward icon-speed-up"></i>
                 </button>
                 <button id="play-pause-button" title="Play / Pause (Enter)">
-                    <i id="play-pause-icon" class="ph ph-play"></i>
+                    <i id="play-pause-icon" class="fas fa-play icon-play"></i>
                 </button>
                 <button id="font-down-button" title="Schriftgröße verkleinern">
-                    <i class="ph ph-text-a-underline"></i> <span style="font-size: 0.8em;">A-</span>
+                    <i class="fas fa-font icon-font"></i> <span style="font-size: 0.8em;">A-</span>
                 </button>
                 <span id="font-display" class="status-display">24px</span> 
                 <button id="font-up-button" title="Schriftgröße vergrößern">
-                    <i class="ph ph-text-a-underline"></i>
+                    <i class="fas fa-font icon-font"></i>
                     <span style="font-size: 1.2em;">A+</span>
                 </button>
                 <button id="fullscreen-button" title="Vollbildmodus an/aus (F-Taste)">
-                    <i id="fullscreen-icon" class="ph ph-arrows-out"></i>
+                    <i id="fullscreen-icon" class="fas fa-expand icon-fullscreen"></i>
                 </button>
             </div>
         </div>

@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveButton.textContent = 'Gespeichert!';
         saveButton.disabled = true;
         setTimeout(() => {
-            saveButton.innerHTML = '<i class="ph ph-floppy-disk"></i> Speichern';
+            saveButton.innerHTML = '<i class="fas fa-save icon-save"></i> Speichern';
             saveButton.disabled = false;
         }, 1500);
         console.log('Text gespeichert.');
@@ -105,10 +105,15 @@ document.addEventListener('DOMContentLoaded', () => {
         prompterDisplay.scrollTop = 0;
 
         // Aktualisiere Icons
-        playPauseIcon.classList.remove('ph-pause');
-        playPauseIcon.classList.add('ph-play');
-        fullscreenIcon.classList.remove('ph-arrows-in');
-        fullscreenIcon.classList.add('ph-arrows-out');
+        playPauseIcon.classList.remove('fa-pause');
+        playPauseIcon.classList.add('fa-play');
+        playPauseIcon.classList.remove('icon-pause');
+        playPauseIcon.classList.add('icon-play');
+        
+        fullscreenIcon.classList.remove('fa-compress');
+        fullscreenIcon.classList.add('fa-expand');
+        fullscreenIcon.classList.remove('icon-exit-fullscreen');
+        fullscreenIcon.classList.add('icon-fullscreen');
 
         // Wechsle die Modi
         editMode.classList.add('hidden');
@@ -130,8 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function scrollText() {
         // Berechnung der Scroll-Distanz für diesen Frame
-        // Die Formel (currentSpeed * 0.X) muss evtl. angepasst werden für angenehme Geschwindigkeit
-        const scrollAmount = currentSpeed * 0.25; // Kleinere Schritte pro Frame
+        // Stärkere Unterschiede zwischen den Geschwindigkeitsstufen
+        const scrollAmount = currentSpeed * 1; // Erhöht für deutlichere Unterschiede
 
         prompterDisplay.scrollTop += scrollAmount;
 
@@ -161,8 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
          }
 
         isPlaying = true;
-        playPauseIcon.classList.remove('ph-play');
-        playPauseIcon.classList.add('ph-pause');
+        playPauseIcon.classList.remove('fa-play');
+        playPauseIcon.classList.add('fa-pause');
+        playPauseIcon.classList.remove('icon-play');
+        playPauseIcon.classList.add('icon-pause');
         console.log("Starte Scrolling");
         animationFrameId = requestAnimationFrame(scrollText); // Starte die Schleife
     }
@@ -174,8 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isPlaying && animationFrameId === null) return; // Nicht stoppen, wenn nicht läuft
 
         isPlaying = false;
-        playPauseIcon.classList.remove('ph-pause');
-        playPauseIcon.classList.add('ph-play');
+        playPauseIcon.classList.remove('fa-pause');
+        playPauseIcon.classList.add('fa-play');
+        playPauseIcon.classList.remove('icon-pause');
+        playPauseIcon.classList.add('icon-play');
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId); // Stoppe die Schleife
             animationFrameId = null;
@@ -224,10 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {number} amount - Zu scrollende Menge (positiv=runter, negativ=hoch)
      */
     function manualScroll(amount) {
-        // Wenn automatisches Scrollen läuft, stoppen
-        if (isPlaying) {
-            stopScrolling();
-        }
+        // Manuelles Scrollen sollte das automatische Scrollen NICHT stoppen
         
         // Scroll sicher innerhalb der Grenzen halten
         const newScrollPos = prompterDisplay.scrollTop + amount;
@@ -263,8 +269,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Icon aktualisieren
-        fullscreenIcon.classList.remove('ph-arrows-out');
-        fullscreenIcon.classList.add('ph-arrows-in');
+        fullscreenIcon.classList.remove('fa-expand');
+        fullscreenIcon.classList.add('fa-compress');
+        fullscreenIcon.classList.remove('icon-fullscreen');
+        fullscreenIcon.classList.add('icon-exit-fullscreen');
     }
 
     /**
@@ -280,8 +288,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Icon aktualisieren
-        fullscreenIcon.classList.remove('ph-arrows-in');
-        fullscreenIcon.classList.add('ph-arrows-out');
+        fullscreenIcon.classList.remove('fa-compress');
+        fullscreenIcon.classList.add('fa-expand');
+        fullscreenIcon.classList.remove('icon-exit-fullscreen');
+        fullscreenIcon.classList.add('icon-fullscreen');
     }
 
     /**
@@ -313,10 +323,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listener für das Umschalten des Control Panels
     prompterDisplay.addEventListener('click', toggleControlsPanel);
 
-    // Globaler Keyboard Listener (nur für Play-Modus)
-    document.addEventListener('keydown', (event) => {
+    // Globaler Keyboard Listener für alle Tastenanschläge (verbesserte Version)
+    document.addEventListener('keydown', function(event) {
         // Nur reagieren, wenn wir im Play-Modus sind
         if (playMode.classList.contains('hidden')) return;
+        
+        // Verhindern, dass Standard-Aktionen ausgeführt werden (wichtig für Pfeiltasten)
+        if (['Enter', 'ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', 'f', 'F', 'Escape'].includes(event.key)) {
+            event.preventDefault();
+        }
         
         switch (event.key) {
             case 'Enter':
@@ -335,6 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 manualScroll(-MANUAL_SCROLL_AMOUNT);
                 break;
             case 'f':
+            case 'F':
                 toggleFullscreen();
                 break;
             case 'Escape':
@@ -351,11 +367,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fullscreen Change Event Listener
     document.addEventListener('fullscreenchange', () => {
         if (document.fullscreenElement) {
-            fullscreenIcon.classList.remove('ph-arrows-out');
-            fullscreenIcon.classList.add('ph-arrows-in');
+            fullscreenIcon.classList.remove('fa-expand');
+            fullscreenIcon.classList.add('fa-compress');
+            fullscreenIcon.classList.remove('icon-fullscreen');
+            fullscreenIcon.classList.add('icon-exit-fullscreen');
         } else {
-            fullscreenIcon.classList.remove('ph-arrows-in');
-            fullscreenIcon.classList.add('ph-arrows-out');
+            fullscreenIcon.classList.remove('fa-compress');
+            fullscreenIcon.classList.add('fa-expand');
+            fullscreenIcon.classList.remove('icon-exit-fullscreen');
+            fullscreenIcon.classList.add('icon-fullscreen');
         }
     });
 

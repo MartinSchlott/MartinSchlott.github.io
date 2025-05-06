@@ -159,9 +159,13 @@ button:hover {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Icons im Control Panel anpassen */
-#controls-panel button i.ph {
-    font-size: 1.8em;
+/* Font Awesome Icons Styling */
+.fas, [class^="icon-"], [class*=" icon-"] {
+    display: inline-block;
+    font-size: 1.8em; /* Größere Icons für bessere Sichtbarkeit */
+    width: 1em;
+    height: 1em;
+    text-align: center;
 }
 
 /* Statusanzeigen im Panel */
@@ -200,10 +204,6 @@ button:hover {
     #controls-panel button {
         width: 42px;
         height: 42px;
-    }
-    
-    #controls-panel button i.ph {
-        font-size: 1.5em;
     }
     
     .status-display {
