@@ -67,4 +67,5 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
-  - _rawmd/ 
+  - _rawmd/
+  - temp/ 

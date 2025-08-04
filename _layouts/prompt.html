@@ -41,30 +41,31 @@
     <hr class="divider" aria-hidden="true" />
   </header>
   <main id="main-content" class="main-content" role="main">
-  {% assign intro = page.content | split: '<!-- START PROMPT -->' | first %}
-  {% assign rest  = page.content | split: '<!-- START PROMPT -->' | last %}
-  {% assign prompt = rest | split: '<!-- END PROMPT -->' | first %}
+    {% assign intro = page.content | split: '<!-- START PROMPT -->' | first %}
+    {% assign rest = page.content | split: '<!-- START PROMPT -->' | last %}
+    {% assign prompt = rest | split: '<!-- END PROMPT -->' | first %}
 
-  {{ intro | markdownify }}
+    {{ intro | markdownify }}
 
-  <div class="prompt-box">
-    <div class="prompt-controls">
-      <button class="toggle-btn" onclick="togglePromptView()">Preview</button>
-      <button class="copy-btn" onclick="copyPromptContent()">Copy</button>
-      <button class="download-btn" onclick="downloadPromptContent()">Download</button>
+    <div class="prompt-box">
+      <div class="prompt-controls">
+        <button class="toggle-btn" onclick="togglePromptView()">Preview</button>
+        <button class="copy-btn" onclick="copyPromptContent()">Copy</button>
+        <button class="download-btn" onclick="downloadPromptContent()">Download</button>
+      </div>
+      <div class="prompt-content raw-mode" id="prompt-content"></div>
+      <template id="prompt-raw-content">{{ prompt | lstrip }}</template>
     </div>
-    <div class="prompt-content raw-mode" id="prompt-content"></div>
-    <template id="prompt-raw-content">{{ prompt | lstrip }}</template>
-  </div>
 
-  <hr>
-  <nav class="prompt-nav">
-    <a href="/">← Back to Home</a>
-    {% if page.source_url or page.source or page.file or page.origin %}
-    • <a href="{{ page.source_url | default: page.source | default: page.file | default: page.origin }}" target="_blank">View Original File</a>
-    {% endif %}
-  </nav>
-</main>
+    <hr>
+    <nav class="prompt-nav">
+      <a href="/">← Back to Home</a>
+      {% if page.source_url or page.source or page.file or page.origin %}
+      • <a href="{{ page.source_url | default: page.source | default: page.file | default: page.origin }}"
+        target="_blank">View Original File</a>
+      {% endif %}
+    </nav>
+  </main>
   <footer role="contentinfo" class="footer">
     <hr class="divider" aria-hidden="true" />
     <p class="footer-text">
@@ -78,16 +79,10 @@
     // Prompt Box JavaScript (wie vorher)
     let originalRawContent = null;
     function getOriginalRawContent() {
-      const rawScript = document.getElementById('prompt-raw');
-      if (rawScript) {
-        const all = JSON.parse(rawScript.textContent);
-        // Nur Inhalt zwischen <!-- START PROMPT --> und <!-- END PROMPT --> extrahieren
-        const match = all.match(/<!-- START PROMPT -->([\\s\\S]*?)<!-- END PROMPT -->/);
-        if (match && match[1]) return match[1].trim();
-        return all.trim();
-      }
-      return '';
+      const rawTemplate = document.getElementById('prompt-raw-content');
+      return rawTemplate ? rawTemplate.innerHTML.trim() : '';
     }
+
     function togglePromptView() {
       const content = document.getElementById('prompt-content');
       const toggleBtn = document.querySelector('.toggle-btn');
@@ -153,6 +148,14 @@
       }, 0);
       return html;
     }
+
+    // Load content when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      const contentDiv = document.getElementById('prompt-content');
+      if (contentDiv) {
+        contentDiv.textContent = getOriginalRawContent();
+      }
+    });
   </script>
 </body>
 
