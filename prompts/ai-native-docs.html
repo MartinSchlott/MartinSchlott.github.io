@@ -16,6 +16,19 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script>
+    // Configure marked to use highlight.js for syntax highlighting
+    marked.setOptions({
+      highlight: function(code, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+          try {
+            return hljs.highlight(code, { language: lang }).value;
+          } catch (err) {}
+        }
+        return hljs.highlightAuto(code).value;
+      }
+    });
+  </script>
 </head>
 
 <body>
@@ -263,13 +276,8 @@ The result: AI that doesn't just write code, but writes **the right code** that 
         toggleBtn.textContent = 'Raw';
         toggleBtn.classList.add('active');
         
-        // Convert Markdown to HTML
+        // Convert Markdown to HTML with syntax highlighting
         content.innerHTML = marked.parse(promptContent);
-        
-        // Apply syntax highlighting
-        content.querySelectorAll('pre code').forEach((block) => {
-          hljs.highlightElement(block);
-        });
 
       } else {
         // Switch to Raw
