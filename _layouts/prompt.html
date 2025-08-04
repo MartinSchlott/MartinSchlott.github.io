@@ -41,11 +41,8 @@
     <hr class="divider" aria-hidden="true" />
   </header>
   <main id="main-content" class="main-content" role="main">
-    {% assign intro = page.content | split: '<!-- START PROMPT -->' | first %}
-    {% assign rest = page.content | split: '<!-- START PROMPT -->' | last %}
-    {% assign prompt = rest | split: '<!-- END PROMPT -->' | first %}
-
-    {{ intro | markdownify }}
+    
+    {{ content }}
 
     <div class="prompt-box">
       <div class="prompt-controls">
@@ -54,8 +51,9 @@
         <button class="download-btn" onclick="downloadPromptContent()">Download</button>
       </div>
       <div class="prompt-content raw-mode" id="prompt-content"></div>
-      <template id="prompt-raw-content">{{ prompt | lstrip }}</template>
     </div>
+
+    <template id="prompt-raw-content">{% include rawmd/{{ page.name }} %}</template>
 
     <hr>
     <nav class="prompt-nav">
@@ -75,11 +73,12 @@
         aria-label="Twitter Profile">@AI_Inquisitor</a>
     </p>
   </footer>
+  
   <script>
-    // Prompt Box JavaScript (wie vorher)
-    let originalRawContent = null;
+    // Diese Funktion ist jetzt wieder super einfach, weil Jekyll die harte Arbeit macht.
     function getOriginalRawContent() {
       const rawTemplate = document.getElementById('prompt-raw-content');
+      // .innerHTML gibt den exakten, unkodierten Inhalt des Templates zurück.
       return rawTemplate ? rawTemplate.innerHTML.trim() : '';
     }
 
@@ -87,13 +86,13 @@
       const content = document.getElementById('prompt-content');
       const toggleBtn = document.querySelector('.toggle-btn');
       if (!content || !toggleBtn) return;
+
       if (content.classList.contains('raw-mode')) {
         content.classList.remove('raw-mode');
         content.classList.add('rendered-mode');
         toggleBtn.textContent = 'Raw';
         toggleBtn.classList.add('active');
-        const rawText = getOriginalRawContent();
-        content.innerHTML = renderMarkdown(rawText);
+        content.innerHTML = renderMarkdown(getOriginalRawContent());
       } else {
         content.classList.remove('rendered-mode');
         content.classList.add('raw-mode');
@@ -102,31 +101,22 @@
         content.textContent = getOriginalRawContent();
       }
     }
+
     function copyPromptContent() {
-      const content = document.getElementById('prompt-content');
-      if (!content) return;
-      const text = content.classList.contains('raw-mode') ?
-        getOriginalRawContent() : content.textContent;
-      navigator.clipboard.writeText(text).then(() => {
+      navigator.clipboard.writeText(getOriginalRawContent()).then(() => {
         const copyBtn = document.querySelector('.copy-btn');
         if (copyBtn) {
           const originalText = copyBtn.textContent;
           copyBtn.textContent = 'Copied!';
-          setTimeout(() => {
-            copyBtn.textContent = originalText;
-          }, 2000);
+          setTimeout(() => { copyBtn.textContent = originalText; }, 2000);
         }
-      }).catch(err => {
-        console.error('Failed to copy: ', err);
-      });
+      }).catch(err => console.error('Failed to copy: ', err));
     }
+
     function downloadPromptContent() {
-      const content = document.getElementById('prompt-content');
-      if (!content) return;
-      const text = content.classList.contains('raw-mode') ?
-        getOriginalRawContent() : content.textContent;
+      const text = getOriginalRawContent();
       const filename = '{{ page.slug | default: page.title | slugify }}.md';
-      const blob = new Blob([text], { type: 'text/markdown' });
+      const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -136,20 +126,18 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
+    
     function renderMarkdown(text) {
       const html = marked.parse(text);
-      // Remove previous .hljs class to avoid double-highlighting artifacts
       setTimeout(() => {
         document.querySelectorAll('.prompt-content.rendered-mode pre code').forEach((el) => {
-          el.classList.remove('hljs');
-          el.innerHTML = el.textContent; // reset content to plain code before highlight
           hljs.highlightElement(el);
         });
       }, 0);
       return html;
     }
 
-    // Load content when page loads
+    // Beim Laden der Seite die Box direkt mit dem Inhalt aus dem Template befüllen.
     document.addEventListener('DOMContentLoaded', () => {
       const contentDiv = document.getElementById('prompt-content');
       if (contentDiv) {
