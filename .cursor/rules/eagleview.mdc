@@ -5,7 +5,7 @@ alwaysApply: true
 
 ## Project Context
 
-You will receive documentation and requirements for Martin Schlott's GitHub profile website (`MartinSchlott.github.io`). This is a Jekyll-based static site that presents AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.
+You will receive documentation and requirements for Martin Schlott's GitHub profile website (`MartinSchlott.github.io`). This is a pure static HTML/CSS/JavaScript site that presents AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.
 
 **If a `/prompts/` directory exists, examine it to understand the content structure and maintain consistency across all implementations.**
 
@@ -24,7 +24,7 @@ Code IS documentation. This project follows AI-native principles where **why-pat
 - No automatic Markdown processing in prompt display areas
 
 ### Technical Architecture  
-- **Jekyll-based static site** - no complex JavaScript frameworks
+- **Pure static HTML/CSS/JavaScript** - no build tools or frameworks
 - **Progressive enhancement** - functionality works without JavaScript
 - **Scraping-friendly structure** - semantic HTML, clear hierarchy
 - **Performance-first** - minimal dependencies, efficient loading
@@ -37,10 +37,9 @@ Code IS documentation. This project follows AI-native principles where **why-pat
 
 ### File Structure Principles
 ```
-/prompts/           # AI rules and architectural guidance
-/_layouts/         # Jekyll templates (principle-based)
+/prompts/           # AI rules and architectural guidance (HTML pages)
 /assets/           # Static resources (avatar, og-image, icons)
-/_rawmd/           # Content inbox (ignored by Jekyll)
+/_rawmd/           # Content inbox (for processing)
 ```
 
 **Note: `/apps/` directory exists but should be ignored - do not modify or reference.**
@@ -49,9 +48,9 @@ Directory names and organization teach the architecture. Examine existing struct
 
 ## Expected Implementation Workflow
 
-1. **Analyze existing patterns** - examine `/prompts/`, `/_layouts/`, and `/assets/` for consistency
+1. **Analyze existing patterns** - examine `/prompts/`, `/assets/`, and existing HTML structure for consistency
 2. **Implement prompt-box component** with copy-to-clipboard and download functionality
-3. **Maintain Jekyll structure** - follow existing frontmatter and layout patterns
+3. **Maintain static HTML structure** - follow existing layout patterns
 4. **Test progressive enhancement** - ensure functionality degrades gracefully
 5. **Validate scraping-friendliness** - clean HTML structure, semantic markup
 
@@ -71,7 +70,7 @@ Directory names and organization teach the architecture. Examine existing struct
 - Accessibility compliance (proper ARIA labels, keyboard navigation)
 
 ### Performance Requirements
-- No external JavaScript dependencies for core functionality
+- Minimal external dependencies - libraries like Marked.js are acceptable
 - Minimal CSS - extend existing `styles.css` patterns
 - Efficient icon usage - SVG or web font, not multiple HTTP requests
 - Fast loading on slow connections
