@@ -44,9 +44,7 @@
       <div class="prompt-content raw-mode" id="prompt-content"></div>
     </div>
     
-    <script id="full-raw-content" type="application/json">
-      {{ page.content | jsonify }}
-    </script>
+    <script id="full-raw-content" type="application/json">{{ page.content | jsonify }}</script>
 
     <hr>
     <nav class="prompt-nav"><a href="/">← Back to Home</a></nav>
@@ -65,60 +63,48 @@
     let introContent = '';
     let promptContent = '';
 
-    // Rendert Markdown und führt Syntax Highlighting aus
-    function renderMarkdown(text) {
-      marked.setOptions({
-        highlight: function(code, lang) {
-          const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-          return hljs.highlight(code, { language, ignoreIllegals: true }).value;
-        }
-      });
-      return marked.parse(text);
-    }
-
-    // Initialisiert die gesamte Seite
+    // Initialisiert die Seite, trennt Intro und Prompt
     function initializePage() {
       const scriptTag = document.getElementById('full-raw-content');
-      if (!scriptTag) {
-        console.error("Dateninsel #full-raw-content nicht gefunden!");
-        return;
-      }
-
       const fullContent = JSON.parse(scriptTag.textContent);
       const parts = fullContent.split('<!-- START PROMPT -->');
       
       introContent = parts[0] || '';
-      let rest = parts[1] || '';
-      
-      const promptParts = rest.split('<!-- END PROMPT -->');
-      promptContent = promptParts[0] ? promptParts[0].trim() : '';
+      const rest = parts[1] || '';
+      promptContent = (rest.split('<!-- END PROMPT -->')[0] || '').trim();
 
-      // Rendere die Einleitung
       const introDiv = document.getElementById('intro-content');
-      if (introDiv) {
-        introDiv.innerHTML = renderMarkdown(introContent);
-      }
+      introDiv.innerHTML = marked.parse(introContent);
 
-      // Initialisiere die Prompt-Box
       const promptDiv = document.getElementById('prompt-content');
-      if (promptDiv) {
-        promptDiv.textContent = promptContent;
-      }
+      promptDiv.textContent = promptContent;
     }
 
-    // Umschalten zwischen Raw und Preview
+    // Schaltet zwischen Raw- und Preview-Modus um
     function togglePromptView() {
       const content = document.getElementById('prompt-content');
       const toggleBtn = document.querySelector('.toggle-btn');
       if (!content || !toggleBtn) return;
 
       if (content.classList.contains('raw-mode')) {
+        // --- WECHSLE ZU PREVIEW ---
         content.classList.remove('raw-mode');
         content.classList.add('rendered-mode');
         toggleBtn.textContent = 'Raw';
         toggleBtn.classList.add('active');
-        content.innerHTML = renderMarkdown(promptContent);
+        
+        // 1. Markdown in HTML umwandeln
+        content.innerHTML = marked.parse(promptContent);
+        
+        // 2. HIGHLIGHTING EXPLIZIT ANSTOSSEN
+        //    Dieser Teil hat gefehlt. Er sucht alle neuen Code-Blöcke
+        //    und weist highlight.js an, sie zu färben.
+        content.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+
       } else {
+        // --- WECHSLE ZU RAW ---
         content.classList.remove('rendered-mode');
         content.classList.add('raw-mode');
         toggleBtn.textContent = 'Preview';
@@ -127,14 +113,11 @@
       }
     }
 
-    // Die folgenden Funktionen sind jetzt einfacher, da sie `promptContent` direkt nutzen
     function copyPromptContent() {
       navigator.clipboard.writeText(promptContent).then(() => {
         const copyBtn = document.querySelector('.copy-btn');
-        if (copyBtn) {
-          copyBtn.textContent = 'Copied!';
-          setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
-        }
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
       });
     }
 
@@ -151,7 +134,6 @@
       URL.revokeObjectURL(url);
     }
 
-    // Starte alles, sobald die Seite geladen ist
     document.addEventListener('DOMContentLoaded', initializePage);
   </script>
 </body>
