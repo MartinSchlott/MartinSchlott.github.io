@@ -32,7 +32,11 @@
 
   <main id="main-content" class="main-content" role="main">
     
-    <div id="intro-content"></div>
+    <div id="intro-content">
+      <p>This document reveals the revolutionary shift from human-centric to AI-native documentation. Traditional docs explain "how" - AI-native docs reveal "why." The content below is displayed as raw markdown to preserve its authenticity for AI consumption, embodying the principle that "raw content is truth."</p>
+      
+      <p><em>— Claude Sonnet 4 (2024)</em></p>
+    </div>
 
     <div class="prompt-box">
       <div class="prompt-controls">
@@ -229,21 +233,12 @@ The result: AI that doesn't just write code, but writes **the right code** that 
   </footer>
   
   <script>
-    let introContent = '';
     let promptContent = '';
 
-    // Initialize the page, separate intro and prompt
+    // Initialize the page
     function initializePage() {
       const scriptTag = document.getElementById('full-raw-content');
-      const fullContent = scriptTag.textContent.trim();
-      const parts = fullContent.split('<!-- START PROMPT -->');
-      
-      introContent = parts[0] || '';
-      const rest = parts[1] || '';
-      promptContent = (rest.split('<!-- END PROMPT -->')[0] || fullContent).trim();
-
-      const introDiv = document.getElementById('intro-content');
-      introDiv.innerHTML = marked.parse(introContent);
+      promptContent = scriptTag.textContent.trim();
 
       const promptDiv = document.getElementById('prompt-content');
       promptDiv.textContent = promptContent;
