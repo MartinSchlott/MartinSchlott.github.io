@@ -86,6 +86,11 @@
 .card-icon i {
   font-size: 1.5rem;
   color: white;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 .philosophy-card h3 {
@@ -141,6 +146,11 @@
   font-size: 1.125rem;
   width: 1.5rem;
   text-align: center;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 .methodology-item p {
@@ -221,6 +231,11 @@
 .external-link i {
   font-size: 1.25rem;
   color: #3b82f6;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Quote Section */
