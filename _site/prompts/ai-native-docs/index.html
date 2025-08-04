@@ -292,8 +292,11 @@ The result: AI that doesn't just write code, but writes **the right code** that 
     }
     function renderMarkdown(text) {
   const html = marked.parse(text);
+  // Remove previous .hljs class to avoid double-highlighting artifacts
   setTimeout(() => {
     document.querySelectorAll('.prompt-content.rendered-mode pre code').forEach((el) => {
+      el.classList.remove('hljs');
+      el.innerHTML = el.textContent; // reset content to plain code before highlight
       hljs.highlightElement(el);
     });
   }, 0);
