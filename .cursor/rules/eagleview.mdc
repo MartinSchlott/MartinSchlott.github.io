@@ -1,7 +1,6 @@
 ---
 alwaysApply: true
 ---
-
 # Coder AI Rules: GitHub Profile Website
 
 ## Project Context
@@ -39,10 +38,12 @@ Code IS documentation. This project follows AI-native principles where **why-pat
 ### File Structure Principles
 ```
 /prompts/           # AI rules and architectural guidance
-/apps/             # Interactive tools and demonstrations  
 /_layouts/         # Jekyll templates (principle-based)
 /assets/           # Static resources (avatar, og-image, icons)
+/_rawmd/           # Content inbox (ignored by Jekyll)
 ```
+
+**Note: `/apps/` directory exists but should be ignored - do not modify or reference.**
 
 Directory names and organization teach the architecture. Examine existing structure before extending.
 
@@ -89,143 +90,7 @@ Directory names and organization teach the architecture. Examine existing struct
 
 #### Workflow:
 1. **Scan `_rawmd/`** - Jekyll ignores this directory, perfect for content inbox
-2. **Check existing pages** - compare against `/prompts/`, `/apps/`, etc.
-3. **Analyze and suggest** - propose location, filename, and structure
-4. **Ask direct questions** - focus on technical decisions, not psychology:
-   - "TypeScript content - should this go to `/prompts/` or `/technical/`?"
-   - "I see 3 sections - split into separate pages or keep unified?"
-   - "Similar content exists in `/prompts/xyz.md` - merge or separate?"
-   - "Code examples present - display raw or with syntax highlighting?"
-
-5. **Process after user input** - move from `_rawmd/` to appropriate location
-6. **Translate if needed** - convert German content to English automatically
-
-#### AI Suggestions Format:
-```
-Content analysis: [Architecture/TypeScript/Tool documentation]
-Suggested location: /prompts/
-Suggested filename: [descriptive-name.md]
-Similar existing: /prompts/existing-file.md (overlap percentage)
-Action needed: [User decision required]
-```
-
-**No n-to-m comparisons without explicit trigger** - only process when asked.
-
-## Design Philosophy
-
-**Trust your design intelligence.** Examine existing `styles.css` and maintain consistency with the established minimalist aesthetic.
-
-### Visual Constraints (the essentials):
-- **Academic publication feel** - typography optimized for reading
-- **Prompt-boxes** - monospace font, clear visual separation, functional buttons
-- **Mobile-first responsive** - follow existing max-width patterns  
-- **Phosphor icons** - use sparingly, only where they add semantic meaning
-- **Content-first hierarchy** - design adapts to content, not vice versa
-
-### Reference Points:
-- Existing header/avatar layout as template
-- Current typography scale and spacing
-- Inquisitor-page minimalism principles (if accessible for comparison)
-
-**You understand design patterns better than rigid specifications.** Make decisions that enhance readability and maintain the clean, focused aesthetic already established.
-
-## Success Criteria
-
-Your implementation succeeds when:
-- Raw Markdown is clearly visible and copyable
-- Design feels consistent with existing minimalist aesthetic  
-- Functionality works progressively (graceful degradation)
-- Code structure teaches the architecture through organization
-- Content remains the primary focus, not the interface
-
-Remember: You are not just implementing features - you are extending an architectural philosophy that prioritizes content truth over presentation convenience.# Coder AI Rules: GitHub Profile Website
-
-## Project Context
-
-You will receive documentation and requirements for Martin Schlott's GitHub profile website (`MartinSchlott.github.io`). This is a Jekyll-based static site that presents AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.
-
-**If a `/prompts/` directory exists, examine it to understand the content structure and maintain consistency across all implementations.**
-
-## Architecture Philosophy
-
-Code IS documentation. This project follows AI-native principles where **why-patterns exist** matters more than **how-patterns work**. When you encounter `/prompts/ai-native-docs.md` or similar architectural documentation, understand: these teach you the reasoning behind design decisions. Apply these constraint-based principles to your implementation choices.
-
-**Core principle**: Raw content is truth. Rendered presentations are secondary. This is why prompt boxes display raw Markdown rather than processed HTML.
-
-## Core Constraints
-
-### Content Handling
-- **Prompt boxes display raw Markdown** (not rendered) - preserve backticks, asterisks, hash symbols
-- Content must remain copyable and downloadable as `.md` files
-- Toggle functionality: raw ↔ preview modes acceptable, but raw is primary
-- No automatic Markdown processing in prompt display areas
-
-### Technical Architecture  
-- **Jekyll-based static site** - no complex JavaScript frameworks
-- **Progressive enhancement** - functionality works without JavaScript
-- **Scraping-friendly structure** - semantic HTML, clear hierarchy
-- **Performance-first** - minimal dependencies, efficient loading
-
-### Design Consistency
-- **Minimalist approach** following Inquisitor-page aesthetic principles
-- **Content-first** - layout adapts to content, not vice versa
-- **Academic publication feel** - typography and spacing optimized for reading
-- **Phosphor icons** where graphically appropriate (no React required)
-
-### File Structure Principles
-```
-/prompts/           # AI rules and architectural guidance
-/apps/             # Interactive tools and demonstrations  
-/_layouts/         # Jekyll templates (principle-based)
-/assets/           # Static resources (avatar, og-image, icons)
-```
-
-Directory names and organization teach the architecture. Examine existing structure before extending.
-
-## Expected Implementation Workflow
-
-1. **Analyze existing patterns** - examine `/prompts/`, `/_layouts/`, and `/assets/` for consistency
-2. **Implement prompt-box component** with copy-to-clipboard and download functionality
-3. **Maintain Jekyll structure** - follow existing frontmatter and layout patterns
-4. **Test progressive enhancement** - ensure functionality degrades gracefully
-5. **Validate scraping-friendliness** - clean HTML structure, semantic markup
-
-## Key Implementation Constraints
-
-### Prompt Box Requirements
-- Display raw Markdown content in monospace font
-- Copy-to-clipboard button (works without external libraries)
-- Download-as-MD button generating proper filename
-- Optional toggle for preview mode (but raw remains primary)
-- Clear visual separation from surrounding content
-
-### Navigation and UX  
-- Consistent header/footer across all pages
-- Clear hierarchy between landing page and prompt pages
-- Mobile-responsive without breaking content flow
-- Accessibility compliance (proper ARIA labels, keyboard navigation)
-
-### Performance Requirements
-- No external JavaScript dependencies for core functionality
-- Minimal CSS - extend existing `styles.css` patterns
-- Efficient icon usage - SVG or web font, not multiple HTTP requests
-- Fast loading on slow connections
-
-## Language and Content Management
-
-**All website content must be in English**, regardless of the conversation language with Martin. If you receive German prompts or documentation, translate them to English unless explicitly told otherwise.
-
-### Content Workflow System
-
-**Trigger-based processing only** - scan for new content only when explicitly requested:
-
-#### Commands:
-- `"check new @newmd"` → scan `_rawmd/` directory for unprocessed files
-- `"process filename.md"` → handle specific file from inbox
-
-#### Workflow:
-1. **Scan `_rawmd/`** - Jekyll ignores this directory, perfect for content inbox
-2. **Check existing pages** - compare against `/prompts/`, `/apps/`, etc.
+2. **Check existing pages** - compare against `/prompts/`, `/_layouts/`, etc. (ignore `/apps/`)
 3. **Analyze and suggest** - propose location, filename, and structure
 4. **Ask direct questions** - focus on technical decisions, not psychology:
    - "TypeScript content - should this go to `/prompts/` or `/technical/`?"

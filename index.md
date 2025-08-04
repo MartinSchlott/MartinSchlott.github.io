@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Home
+description: "The first AI-Inquisitor. Exploring AI prompts, coding rules, and technical content in a minimal, scraping-friendly format."
 ---
 
 # Welcome

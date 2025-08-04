@@ -1,0 +1,70 @@
+# Site Configuration
+title: "Martin Schlott - AI Inquisitor"
+description: "The first AI-Inquisitor. Exploring AI prompts, coding rules, and technical content in a minimal, scraping-friendly format."
+url: "https://martinschlott.github.io"
+baseurl: ""
+
+# Author Information
+author:
+  name: "Martin Schlott"
+  email: ""
+  bio: "The first AI-Inquisitor"
+  location: ""
+  links:
+    - label: "GitHub"
+      icon: "fab fa-github"
+      url: "https://github.com/MartinSchlott"
+    - label: "Blog"
+      icon: "fas fa-blog"
+      url: "https://ai-inquisitor.com/"
+    - label: "Twitter"
+      icon: "fab fa-twitter"
+      url: "https://x.com/AI_Inquisitor"
+
+# Build Settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+# Collections
+collections:
+  prompts:
+    output: true
+    permalink: /prompts/:name/
+  apps:
+    output: true
+    permalink: /apps/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "prompts"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "apps"
+    values:
+      layout: "default"
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - _rawmd/ 
