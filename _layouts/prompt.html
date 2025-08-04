@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% if page.title %}{{ page.title }} - {% endif %}Martin Schlott - AI Inquisitor</title>
   <meta property="og:title" content="{% if page.title %}{{ page.title }} - {% endif %}Martin Schlott - AI Inquisitor" />
-  <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}The first AI-Inquisitor. Exploring AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.{% endif %}" />
+  <meta property="og:description"
+    content="{% if page.description %}{{ page.description }}{% else %}The first AI-Inquisitor. Exploring AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.{% endif %}" />
   <meta property="og:image" content="{{ site.url }}/assets/og.jpg" />
   <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Martin Schlott - AI Inquisitor" />
-  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}The first AI-Inquisitor. Exploring AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.{% endif %}" />
+  <meta name="description"
+    content="{% if page.description %}{{ page.description }}{% else %}The first AI-Inquisitor. Exploring AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.{% endif %}" />
   <meta name="author" content="Martin Schlott" />
   <meta name="robots" content="index, follow" />
   <link rel="stylesheet" href="/styles.css" />
@@ -20,6 +23,7 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
 </head>
+
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <header role="banner">
@@ -37,34 +41,52 @@
     <hr class="divider" aria-hidden="true" />
   </header>
   <main id="main-content" class="main-content" role="main">
-    {{ content }}
-    <hr>
-    <nav class="prompt-nav">
-      <a href="/">← Back to Home</a>
-      {% if page.source_url or page.source or page.file or page.origin %}
-      • <a href="{{ page.source_url | default: page.source | default: page.file | default: page.origin }}" target="_blank">View Original File</a>
-      {% endif %}
-    </nav>
-  </main>
+  {% assign intro = page.content | split: '<!-- START PROMPT -->' | first %}
+  {% assign rest  = page.content | split: '<!-- START PROMPT -->' | last %}
+  {% assign prompt = rest | split: '<!-- END PROMPT -->' | first %}
+
+  {{ intro | markdownify }}
+
+  <div class="prompt-box">
+    <div class="prompt-controls">
+      <button class="toggle-btn" onclick="togglePromptView()">Preview</button>
+      <button class="copy-btn" onclick="copyPromptContent()">Copy</button>
+      <button class="download-btn" onclick="downloadPromptContent()">Download</button>
+    </div>
+    <div class="prompt-content raw-mode" id="prompt-content"></div>
+    <template id="prompt-raw-content">{{ prompt | lstrip }}</template>
+  </div>
+
+  <hr>
+  <nav class="prompt-nav">
+    <a href="/">← Back to Home</a>
+    {% if page.source_url or page.source or page.file or page.origin %}
+    • <a href="{{ page.source_url | default: page.source | default: page.file | default: page.origin }}" target="_blank">View Original File</a>
+    {% endif %}
+  </nav>
+</main>
   <footer role="contentinfo" class="footer">
     <hr class="divider" aria-hidden="true" />
     <p class="footer-text">
       <a href="https://github.com/MartinSchlott" target="_blank" rel="noopener" aria-label="GitHub Profile">GitHub</a> •
       <a href="https://ai-inquisitor.com/" target="_blank" rel="noopener" aria-label="AI Inquisitor Blog">Blog</a> •
-      <a href="https://x.com/AI_Inquisitor" target="_blank" rel="noopener" aria-label="Twitter Profile">@AI_Inquisitor</a>
+      <a href="https://x.com/AI_Inquisitor" target="_blank" rel="noopener"
+        aria-label="Twitter Profile">@AI_Inquisitor</a>
     </p>
   </footer>
   <script>
     // Prompt Box JavaScript (wie vorher)
     let originalRawContent = null;
     function getOriginalRawContent() {
-      if (!originalRawContent) {
-        const content = document.getElementById('prompt-content');
-        if (content) {
-          originalRawContent = content.textContent;
-        }
+      const rawScript = document.getElementById('prompt-raw');
+      if (rawScript) {
+        const all = JSON.parse(rawScript.textContent);
+        // Nur Inhalt zwischen <!-- START PROMPT --> und <!-- END PROMPT --> extrahieren
+        const match = all.match(/<!-- START PROMPT -->([\\s\\S]*?)<!-- END PROMPT -->/);
+        if (match && match[1]) return match[1].trim();
+        return all.trim();
       }
-      return originalRawContent;
+      return '';
     }
     function togglePromptView() {
       const content = document.getElementById('prompt-content');
@@ -120,17 +142,18 @@
       URL.revokeObjectURL(url);
     }
     function renderMarkdown(text) {
-  const html = marked.parse(text);
-  // Remove previous .hljs class to avoid double-highlighting artifacts
-  setTimeout(() => {
-    document.querySelectorAll('.prompt-content.rendered-mode pre code').forEach((el) => {
-      el.classList.remove('hljs');
-      el.innerHTML = el.textContent; // reset content to plain code before highlight
-      hljs.highlightElement(el);
-    });
-  }, 0);
-  return html;
-}
+      const html = marked.parse(text);
+      // Remove previous .hljs class to avoid double-highlighting artifacts
+      setTimeout(() => {
+        document.querySelectorAll('.prompt-content.rendered-mode pre code').forEach((el) => {
+          el.classList.remove('hljs');
+          el.innerHTML = el.textContent; // reset content to plain code before highlight
+          hljs.highlightElement(el);
+        });
+      }, 0);
+      return html;
+    }
   </script>
 </body>
+
 </html>

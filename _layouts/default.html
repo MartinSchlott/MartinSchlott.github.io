@@ -68,15 +68,16 @@
   <script>
     // Store original raw content
     let originalRawContent = null;
-    
     function getOriginalRawContent() {
-      if (!originalRawContent) {
-        const content = document.getElementById('prompt-content');
-        if (content) {
-          originalRawContent = content.textContent;
-        }
+      const rawScript = document.getElementById('prompt-raw');
+      if (rawScript) {
+        const all = JSON.parse(rawScript.textContent);
+        // Nur Inhalt zwischen <!-- START PROMPT --> und <!-- END PROMPT --> extrahieren
+        const match = all.match(/<!-- START PROMPT -->([\\s\\S]*?)<!-- END PROMPT -->/);
+        if (match && match[1]) return match[1].trim();
+        return all.trim();
       }
-      return originalRawContent;
+      return '';
     }
     
     // Toggle between raw and rendered view

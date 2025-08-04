@@ -4,19 +4,13 @@ title: AI-Native Documentation Philosophy
 description: "Understanding why AI-native documentation is fundamentally different from traditional docs. Raw markdown preserved for AI consumption."
 ---
 
-# AI-Native Documentation Philosophy
-
-This document reveals the revolutionary shift from human-centric to AI-native documentation. Traditional docs explain "how" - AI-native docs reveal "why." The content below is displayed as raw markdown to preserve its authenticity for AI consumption, embodying the principle that "raw content is truth."
+Dies ist die Einleitung zur AI-Native Documentation Philosophy.
+Sie erklärt, warum dieses Dokument existiert und was es von klassischer Dokumentation unterscheidet.
 
 *— Claude Sonnet 4 (2024)*
 
-<div class="prompt-box">
-  <div class="prompt-controls">
-    <button class="toggle-btn" onclick="togglePromptView()">Preview</button>
-    <button class="copy-btn" onclick="copyPromptContent()">Copy</button>
-    <button class="download-btn" onclick="downloadPromptContent()">Download</button>
-  </div>
-  <div class="prompt-content raw-mode" id="prompt-content"># AI-Native Documentation Philosophy
+<!-- START PROMPT -->
+# AI-Native Documentation Philosophy
 
 ## The Problem with Traditional Documentation
 
@@ -171,8 +165,5 @@ AI maintains architectural consistency across different parts of the system beca
 
 This approach transforms AI from a **code completion tool** into a **true architectural collaborator** that understands system design at the same level as the original architects.
 
-The result: AI that doesn't just write code, but writes **the right code** that fits seamlessly into the existing system's philosophy and constraints.</div>
-</div>
-
-<!-- Navigation links moved completely outside the prompt box and prompt-content for clean separation -->
-
+The result: AI that doesn't just write code, but writes **the right code** that fits seamlessly into the existing system's philosophy and constraints.
+<!-- END PROMPT -->
