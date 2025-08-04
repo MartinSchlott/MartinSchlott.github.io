@@ -19,32 +19,18 @@
   <script>
     // Wait for highlight.js to load, then configure marked
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOMContentLoaded fired');
-      console.log('hljs available:', typeof hljs !== 'undefined');
-      console.log('marked available:', typeof marked !== 'undefined');
-      
       if (typeof hljs !== 'undefined') {
-        console.log('Configuring marked with highlight.js');
         // Configure marked to use highlight.js for syntax highlighting
         marked.setOptions({
           highlight: function(code, lang) {
-            console.log('Highlight function called with lang:', lang);
             if (lang && hljs.getLanguage(lang)) {
               try {
-                const result = hljs.highlight(code, { language: lang }).value;
-                console.log('Highlighted with language:', lang);
-                return result;
-              } catch (err) {
-                console.log('Error highlighting with language:', lang, err);
-              }
+                return hljs.highlight(code, { language: lang }).value;
+              } catch (err) {}
             }
-            const result = hljs.highlightAuto(code).value;
-            console.log('Auto-highlighted');
-            return result;
+            return hljs.highlightAuto(code).value;
           }
         });
-      } else {
-        console.log('hljs not available, skipping syntax highlighting');
       }
     });
   </script>
@@ -269,32 +255,19 @@ The result: AI that doesn't just write code, but writes **the right code** that 
 
     // Initialize the page
     function initializePage() {
-      console.log('initializePage called');
       const scriptTag = document.getElementById('full-raw-content');
       promptContent = scriptTag.textContent.trim();
-      console.log('Prompt content length:', promptContent.length);
 
       const promptDiv = document.getElementById('prompt-content');
-      console.log('Prompt div found:', !!promptDiv);
       
       // Start in preview mode (rendered)
-      const renderedContent = marked.parse(promptContent);
-      console.log('Rendered content length:', renderedContent.length);
-      promptDiv.innerHTML = renderedContent;
-      
-      // Check for code blocks
-      const codeBlocks = promptDiv.querySelectorAll('pre code');
-      console.log('Found code blocks:', codeBlocks.length);
+      promptDiv.innerHTML = marked.parse(promptContent);
       
       // Apply syntax highlighting if hljs is available
       if (typeof hljs !== 'undefined') {
-        console.log('Applying syntax highlighting to', codeBlocks.length, 'blocks');
-        codeBlocks.forEach((block, index) => {
-          console.log('Highlighting block', index, 'with content:', block.textContent.substring(0, 50) + '...');
+        promptDiv.querySelectorAll('pre code').forEach((block) => {
           hljs.highlightElement(block);
         });
-      } else {
-        console.log('hljs not available for manual highlighting');
       }
     }
 
