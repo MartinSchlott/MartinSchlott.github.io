@@ -16,8 +16,7 @@ This document reveals the revolutionary shift from human-centric to AI-native do
     <button class="copy-btn" onclick="copyPromptContent()">Copy</button>
     <button class="download-btn" onclick="downloadPromptContent()">Download</button>
   </div>
-  <div class="prompt-content raw-mode" id="prompt-content">
-# AI-Native Documentation Philosophy
+  <div class="prompt-content raw-mode" id="prompt-content"># AI-Native Documentation Philosophy
 
 ## The Problem with Traditional Documentation
 
@@ -172,8 +171,7 @@ AI maintains architectural consistency across different parts of the system beca
 
 This approach transforms AI from a **code completion tool** into a **true architectural collaborator** that understands system design at the same level as the original architects.
 
-The result: AI that doesn't just write code, but writes **the right code** that fits seamlessly into the existing system's philosophy and constraints.
-  </div>
+The result: AI that doesn't just write code, but writes **the right code** that fits seamlessly into the existing system's philosophy and constraints.</div>
 </div>
 
 <p class="back-link">
