@@ -1,0 +1,235 @@
+/* Grundlegende Resets und Defaults */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    padding: 20px; /* Etwas Abstand zum Rand */
+}
+
+main {
+    width: 100%;
+    max-width: 900px; /* Maximale Breite für bessere Lesbarkeit */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Helferklasse zum Ausblenden */
+.hidden {
+    display: none !important; /* Wichtig, um Inline-Styles zu überschreiben */
+}
+
+/* ------ Edit-Modus Styling ------ */
+#edit-mode h2 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#edit-mode #text-input {
+    display: block;
+    width: 100%;
+    min-height: 40vh; /* Gute Mindesthöhe für Texteingabe */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+#edit-mode .button-bar {
+    display: flex;
+    justify-content: flex-end; /* Buttons rechtsbündig */
+    gap: 10px; /* Abstand zwischen Buttons */
+}
+
+/* ------ Play-Modus Styling ------ */
+#play-mode {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+#play-mode.hidden {
+    display: none;
+}
+
+/* Wenn Play-Modus aktiv ist, Body/Main anpassen */
+body.play-active {
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+main.play-active {
+    display: flex;
+    flex-direction: column;
+    max-width: none;
+    height: 100vh;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+#prompter-display {
+    flex-grow: 1;
+    padding: 40px 20px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    border: 1px dashed #aaa;
+    background-color: #fff;
+    color: #000;
+    font-size: 24px;
+    line-height: 1.8;
+    text-align: center;
+    white-space: pre-wrap;
+    cursor: pointer; /* Zeigt an, dass es klickbar ist */
+}
+
+#controls-panel {
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(30, 30, 30, 0.9);
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    z-index: 100;
+    color: #eee;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Spätere Klasse zum Ausblenden des Panels */
+#controls-panel.controls-hidden {
+    transform: translateY(100%);
+}
+
+/* ------ Generelles Button & Icon Styling ------ */
+button {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #eee;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+/* --- Styling für die Buttons im Control Panel --- */
+#controls-panel button {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #eee;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+#controls-panel button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#controls-panel button:active {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Font Awesome Icons Styling */
+.fas, [class^="icon-"], [class*=" icon-"] {
+    display: inline-block;
+    font-size: 1.8em; /* Größere Icons für bessere Sichtbarkeit */
+    width: 1em;
+    height: 1em;
+    text-align: center;
+}
+
+/* Statusanzeigen im Panel */
+.status-display {
+    font-weight: bold;
+    min-width: 45px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Responsive Anpassungen für kleinere Geräte */
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+    }
+    
+    main {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 10px;
+    }
+    
+    #edit-mode #text-input {
+        min-height: 50vh; /* Mehr Platz auf Mobilgeräten für Texteingabe */
+    }
+    
+    #controls-panel {
+        flex-wrap: wrap;
+        padding: 10px 5px;
+        gap: 10px;
+    }
+    
+    #controls-panel button {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .status-display {
+        min-width: 35px;
+        font-size: 0.8em;
+    }
+    
+    #prompter-display {
+        padding: 20px 10px;
+    }
+}
+
+/* Besser für kleine Screens */
+@media (max-width: 480px) {
+    #controls-panel {
+        padding: 8px 4px;
+        gap: 5px;
+    }
+    
+    #controls-panel button {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+/* Hilfsklasse für Touch-optimierte Bereiche */
+.touch-target {
+    min-height: 44px; /* Empfohlene Mindestgröße für Touch-Targets */
+}
