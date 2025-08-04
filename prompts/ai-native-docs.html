@@ -40,11 +40,11 @@
 
     <div class="prompt-box">
       <div class="prompt-controls">
-        <button class="toggle-btn" onclick="togglePromptView()">Preview</button>
+        <button class="toggle-btn active" onclick="togglePromptView()">Raw</button>
         <button class="copy-btn" onclick="copyPromptContent()">Copy</button>
         <button class="download-btn" onclick="downloadPromptContent()">Download</button>
       </div>
-      <div class="prompt-content raw-mode" id="prompt-content"></div>
+      <div class="prompt-content rendered-mode" id="prompt-content"></div>
     </div>
     
     <script id="full-raw-content" type="application/json">
@@ -241,7 +241,13 @@ The result: AI that doesn't just write code, but writes **the right code** that 
       promptContent = scriptTag.textContent.trim();
 
       const promptDiv = document.getElementById('prompt-content');
-      promptDiv.textContent = promptContent;
+      // Start in preview mode (rendered)
+      promptDiv.innerHTML = marked.parse(promptContent);
+      
+      // Apply syntax highlighting
+      promptDiv.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
     }
 
     // Toggle between Raw and Preview mode

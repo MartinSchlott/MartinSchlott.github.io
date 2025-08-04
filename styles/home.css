@@ -62,14 +62,7 @@
   border-radius: 1rem;
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-}
-
-.philosophy-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border-color: #3b82f6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .card-icon {
@@ -117,18 +110,14 @@
 }
 
 .methodology-item {
-  background-color: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
 }
 
-.methodology-item:hover {
-  border-color: #3b82f6;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.methodology-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
 }
 
 .methodology-item h3 {
@@ -157,6 +146,7 @@
   color: #6b7280;
   line-height: 1.6;
   margin: 0;
+  padding-left: 2.25rem;
 }
 
 /* Prompt Links */
@@ -172,24 +162,24 @@
   margin-bottom: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .prompt-card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-color: #3b82f6;
+  transform: translateY(-1px);
 }
 
 .prompt-card h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.25rem;
-}
-
-.prompt-card h3 a {
   color: #1a1a1a;
-  text-decoration: none;
 }
 
-.prompt-card h3 a:hover {
+.prompt-card:hover h3 {
   color: #3b82f6;
 }
 
