@@ -16,6 +16,9 @@
   <link rel="stylesheet" href="/styles.css" />
   <link rel="preload" href="/assets/avatar.png" as="image" />
   <link rel="preload" href="/assets/og.jpg" as="image" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -117,23 +120,14 @@
       URL.revokeObjectURL(url);
     }
     function renderMarkdown(text) {
-      return text
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-        .replace(/`([^`]+)`/g, '<code>$1</code>')
-        .replace(/^- (.*$)/gim, '<li>$1</li>')
-        .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/^(.*$)/gim, '<p>$1</p>')
-        .replace(/<p><\/p>/g, '')
-        .replace(/<p>(<h[1-6]>.*<\/h[1-6]>)<\/p>/g, '$1')
-        .replace(/<p>(<ul>.*<\/ul>)<\/p>/g, '$1')
-        .replace(/<p>(<pre>.*<\/pre>)<\/p>/g, '$1');
-    }
+  const html = marked.parse(text);
+  setTimeout(() => {
+    document.querySelectorAll('.prompt-content.rendered-mode pre code').forEach((el) => {
+      hljs.highlightElement(el);
+    });
+  }, 0);
+  return html;
+}
   </script>
 </body>
 </html>

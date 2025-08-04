@@ -257,7 +257,7 @@ header {
   color: #dc2626;
 }
 
-.prompt-content.rendered-mode pre, .prompt-content.rendered-mode pre code {
+.prompt-content.rendered-mode pre, .prompt-content.rendered-mode pre code, .prompt-content.rendered-mode pre *
   background-color: #1f2937 !important;
   color: #f9fafb !important;
   font-family: 'Fira Mono', 'Menlo', 'Monaco', monospace;
@@ -275,6 +275,16 @@ header {
   padding: 0;
   border: none;
 }
+
+.prompt-content.rendered-mode pre code span,
+.prompt-content.rendered-mode pre code em,
+.prompt-content.rendered-mode pre code strong {
+  color: #f9fafb !important;
+  opacity: 1 !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+}
+
 
 
 /* Back Link */
@@ -419,6 +429,32 @@ header {
     border: 1px solid #ccc;
     background-color: white;
   }
+}
+
+/* Fallback: Enforce eagleview dark style on all preview code blocks */
+.prompt-content.rendered-mode pre,
+.prompt-content.rendered-mode pre code,
+.prompt-content.rendered-mode pre * {
+  background: #1f2937 !important;
+  color: #f9fafb !important;
+  font-family: 'Fira Mono', 'Menlo', 'Monaco', monospace !important;
+  border-radius: 8px;
+  line-height: 1.4 !important;
+  font-size: 1em;
+}
+
+.prompt-content.rendered-mode pre code {
+  background: none !important;
+  color: inherit !important;
+  padding: 0;
+  border: none;
+}
+
+.prompt-content.rendered-mode code {
+  background: #1f2937 !important;
+  color: #f9fafb !important;
+  border-radius: 6px;
+  padding: 0.15em 0.3em;
 }
 
 /* Focus Styles for Accessibility */
