@@ -13,19 +13,38 @@
   <meta name="author" content="Martin Schlott" />
   <link rel="stylesheet" href="/styles.css" />
   <link rel="preload" href="/assets/avatar.png" as="image" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script>
-    // Configure marked to use highlight.js for syntax highlighting
-    marked.setOptions({
-      highlight: function(code, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-          try {
-            return hljs.highlight(code, { language: lang }).value;
-          } catch (err) {}
-        }
-        return hljs.highlightAuto(code).value;
+    // Wait for highlight.js to load, then configure marked
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOMContentLoaded fired');
+      console.log('hljs available:', typeof hljs !== 'undefined');
+      console.log('marked available:', typeof marked !== 'undefined');
+      
+      if (typeof hljs !== 'undefined') {
+        console.log('Configuring marked with highlight.js');
+        // Configure marked to use highlight.js for syntax highlighting
+        marked.setOptions({
+          highlight: function(code, lang) {
+            console.log('Highlight function called with lang:', lang);
+            if (lang && hljs.getLanguage(lang)) {
+              try {
+                const result = hljs.highlight(code, { language: lang }).value;
+                console.log('Highlighted with language:', lang);
+                return result;
+              } catch (err) {
+                console.log('Error highlighting with language:', lang, err);
+              }
+            }
+            const result = hljs.highlightAuto(code).value;
+            console.log('Auto-highlighted');
+            return result;
+          }
+        });
+      } else {
+        console.log('hljs not available, skipping syntax highlighting');
       }
     });
   </script>
@@ -250,17 +269,33 @@ The result: AI that doesn't just write code, but writes **the right code** that 
 
     // Initialize the page
     function initializePage() {
+      console.log('initializePage called');
       const scriptTag = document.getElementById('full-raw-content');
       promptContent = scriptTag.textContent.trim();
+      console.log('Prompt content length:', promptContent.length);
 
       const promptDiv = document.getElementById('prompt-content');
-      // Start in preview mode (rendered)
-      promptDiv.innerHTML = marked.parse(promptContent);
+      console.log('Prompt div found:', !!promptDiv);
       
-      // Apply syntax highlighting
-      promptDiv.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightElement(block);
-      });
+      // Start in preview mode (rendered)
+      const renderedContent = marked.parse(promptContent);
+      console.log('Rendered content length:', renderedContent.length);
+      promptDiv.innerHTML = renderedContent;
+      
+      // Check for code blocks
+      const codeBlocks = promptDiv.querySelectorAll('pre code');
+      console.log('Found code blocks:', codeBlocks.length);
+      
+      // Apply syntax highlighting if hljs is available
+      if (typeof hljs !== 'undefined') {
+        console.log('Applying syntax highlighting to', codeBlocks.length, 'blocks');
+        codeBlocks.forEach((block, index) => {
+          console.log('Highlighting block', index, 'with content:', block.textContent.substring(0, 50) + '...');
+          hljs.highlightElement(block);
+        });
+      } else {
+        console.log('hljs not available for manual highlighting');
+      }
     }
 
     // Toggle between Raw and Preview mode
