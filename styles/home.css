@@ -1,18 +1,142 @@
 /* Home Page Specific Styles */
 
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding: 2rem 0;
+}
+
+.hero-section h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: 0.05em;
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  color: #374151;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Philosophy Section */
+.philosophy-section {
+  margin-bottom: 4rem;
+}
+
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.philosophy-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.philosophy-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: #3b82f6;
+}
+
+.card-icon {
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.card-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.philosophy-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  color: #1a1a1a;
+}
+
+.philosophy-card p {
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* Content Sections */
-.welcome-section {
-  margin-bottom: 3rem;
-}
-
 .content-section {
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
-.status-section {
-  margin-top: 3rem;
+/* Methodology List */
+.methodology-list {
+  margin-top: 2rem;
 }
 
+.methodology-item {
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.methodology-item:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.methodology-item h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: #1a1a1a;
+}
+
+.methodology-item h3 i {
+  color: #3b82f6;
+  font-size: 1.125rem;
+}
+
+.methodology-item p {
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Prompt Links */
 .prompt-links {
   margin-top: 1.5rem;
 }
@@ -20,15 +144,15 @@
 .prompt-card {
   background-color: #ffffff;
   border: 1px solid #e5e5e5;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
 .prompt-card:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-color: #3b82f6;
 }
 
@@ -50,8 +174,10 @@
   margin: 0;
   color: #6b7280;
   font-size: 0.875rem;
+  line-height: 1.5;
 }
 
+/* External Links */
 .external-links {
   display: flex;
   flex-direction: column;
@@ -66,49 +192,95 @@
   padding: 1rem;
   background-color: #ffffff;
   border: 1px solid #e5e5e5;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   text-decoration: none;
   color: #1a1a1a;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .external-link:hover {
   border-color: #3b82f6;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
 }
 
-.link-icon {
+.external-link i {
   font-size: 1.25rem;
+  color: #3b82f6;
 }
 
-.status-section blockquote {
+/* Quote Section */
+.quote-section {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.quote-section blockquote {
   margin: 0;
-  padding: 1.5rem;
-  background-color: #f8fafc;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   border-left: 4px solid #3b82f6;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.status-section blockquote p {
+.quote-section blockquote p {
   margin: 0 0 1rem 0;
-  font-size: 1rem;
-  color: #374151;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+  font-weight: 500;
+  font-style: italic;
 }
 
-.status-section blockquote footer {
+.quote-section blockquote footer {
   margin: 0;
-  font-style: italic;
+  font-style: normal;
   color: #6b7280;
   font-size: 0.875rem;
+  font-weight: 500;
 }
 
 /* Mobile Responsive for Home */
 @media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-tagline {
+    font-size: 1.25rem;
+  }
+  
+  .philosophy-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .philosophy-card {
+    padding: 1.5rem;
+  }
+  
+  .methodology-item {
+    padding: 1rem;
+  }
+  
+  .methodology-item h3 {
+    font-size: 1.125rem;
+  }
+  
   .prompt-card {
     padding: 1rem;
   }
   
   .external-link {
     padding: 0.75rem;
+  }
+  
+  .quote-section blockquote {
+    padding: 1.5rem;
+  }
+  
+  .quote-section blockquote p {
+    font-size: 1.125rem;
   }
 } 
