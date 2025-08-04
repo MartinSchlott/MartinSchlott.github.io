@@ -1,11 +1,11 @@
-/* Main CSS - Imports modular stylesheets */
+/* Main CSS - This file is deprecated */
 
-/* Base styles - required by all pages */
-@import url('styles/base.css');
-
-/* Page-specific styles - loaded conditionally */
-/* Home page styles */
-@import url('styles/home.css');
-
-/* Prompt page styles */
-@import url('styles/prompt.css');
+/* Use direct CSS loading instead of @import:
+ * 
+ * In HTML files, use:
+ * <link rel="stylesheet" href="/styles/base.css" />
+ * <link rel="stylesheet" href="/styles/home.css" />
+ * <link rel="stylesheet" href="/styles/prompt.css" />
+ * 
+ * This approach is more reliable and avoids caching issues.
+ */
