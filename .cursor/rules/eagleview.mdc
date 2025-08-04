@@ -71,7 +71,7 @@ Directory names and organization teach the architecture. Examine existing struct
 
 ### Performance Requirements
 - Minimal external dependencies - libraries like Marked.js are acceptable
-- Minimal CSS - extend existing `styles.css` patterns
+- Modular CSS structure - separate main layout from specific functionality
 - Efficient icon usage - SVG or web font, not multiple HTTP requests
 - Fast loading on slow connections
 
