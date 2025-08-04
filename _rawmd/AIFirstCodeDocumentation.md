@@ -20,21 +20,21 @@ Traditional software documentation is written for humans who need explanations, 
 
 ```typescript
 // This tells AI everything it needs to know:
-export async function executeNodeToolInvocation(
-  executionContext: ExecutionContext,
-  toolUri: string,
-  inputParameters: any
-): Promise<OperationResult<ToolInvocationResult>>
+export async function processUserOrder(
+  requestContext: RequestContext,
+  orderId: string,
+  paymentData: PaymentDetails
+): Promise<OperationResult<OrderConfirmation>>
 
 // This is noise:
 /**
- * @description Executes a tool invocation on a node within the given execution context
- * @param executionContext The context containing assembly and node information
- * @param toolUri The URI of the tool to invoke 
- * @param inputParameters Parameters to pass to the tool
- * @returns Promise that resolves to operation result with tool invocation result
+ * @description Processes a user order with payment validation
+ * @param requestContext The context containing user session and auth information
+ * @param orderId The unique identifier of the order to process
+ * @param paymentData Payment information for the order
+ * @returns Promise that resolves to operation result with order confirmation
  * @example
- * const result = await executeNodeToolInvocation(ctx, "tool:/operator/parser", {data: "..."});
+ * const result = await processUserOrder(ctx, "order-123", {cardNumber: "..."});
  */
 ```
 
@@ -42,11 +42,11 @@ export async function executeNodeToolInvocation(
 
 **Focus on "Why" and "Where" instead of "How":**
 
-**Why-focused**: "ExecutionContext is threaded through all operations because Nodes need assembly context and caller information for coordination."
+**Why-focused**: "RequestContext is threaded through all operations because handlers need session and auth information for authorization decisions."
 
-**Where-focused**: "Debug capabilities live in `foundation/debug/` because they operate outside normal Node rules and access data structures directly."
+**Where-focused**: "Validation utilities live in `utils/validation/` because they operate independently of business logic and are shared across domains."
 
-**Not How-focused**: ~~"To create a node, first call create(), then set the core, then configure..."~~
+**Not How-focused**: ~~"To create an order, first call create(), then validate payment, then save..."~~
 
 ### Architecture Decision Records for AI
 
@@ -60,9 +60,9 @@ Document the **reasoning behind architectural decisions**, not the mechanics:
 
 Tell AI what **NOT** to do and why, rather than micromanaging what to do:
 
-**Effective**: "The `transport/` directory has technical debt and doesn't follow pure Clarion patterns - don't use as reference for new code."
+**Effective**: "The legacy `payments/` module has technical debt and doesn't follow current patterns - don't use as reference for new code."
 
-**Ineffective**: ~~"When implementing new transport mechanisms, follow the patterns in `foundation/protocols/` and ensure proper error handling with OperationResult..."~~
+**Ineffective**: ~~"When implementing new payment mechanisms, follow the patterns in `services/billing/` and ensure proper error handling with OperationResult..."~~
 
 ## Core Principles
 
@@ -92,15 +92,15 @@ When AI understands the **principles** behind a system, it can:
 - Debug issues by understanding expected vs actual behavior
 
 ### 4. Context Over Examples
-**Better**: "Assembly is primus inter pares - first among equals, not a central orchestrator. Complexity emerges from peer-to-peer coordination."
+**Better**: "Service layer coordinates but doesn't orchestrate - entities remain autonomous and communicate through events."
 
-**Worse**: ~~"Here's how to create an assembly: step 1, step 2, step 3..."~~
+**Worse**: ~~"Here's how to create a user service: step 1, step 2, step 3..."~~
 
 ### 5. Constraints Are Features
 **Document limitations and constraints as primary features:**
-- "Lua cores use constrained language to prevent over-engineering"
-- "ExecutionContext is never created manually - always threaded through call chains"  
-- "Debug capabilities don't follow normal Node rules - pragmatic necessity over purity"
+- "Config files use JSON not code to prevent runtime injection attacks"
+- "RequestContext is never created manually - always threaded through middleware chains"  
+- "Financial calculations use Decimal types never Float - precision is critical"
 
 ## Implementation Guidelines
 
@@ -111,12 +111,25 @@ Create unstructured "brain dump" documents that capture:
 - **Concept relationships** and boundaries
 - **Anti-patterns** to avoid and why
 
+### Critical Decision Comments
+**Use minimal, high-precision inline comments for critical architectural decisions:**
+```typescript
+// Password hashing: bcrypt with 12 rounds - balance security vs performance
+const hashedPassword = await bcrypt.hash(password, 12);
+
+// Cache invalidation: aggressive clearing prevents stale user permissions
+await cache.deletePattern(`user:${userId}:*`);
+```
+
+These comments capture **why** specific implementation choices were made, especially where the reasoning isn't obvious from the code alone.
+
 ### Self-Documenting Code Structure
 ```
-foundation/debug/     # Capability operates outside normal rules
-foundation/log/       # System-wide "round filing" not Node-bound  
-infrastructure/       # Server necessities, not Clarion concepts
-nodetypes/           # Concrete implementations of abstract Node
+services/auth/        # User authentication and session management
+services/orders/      # Order processing and fulfillment
+utils/validation/     # Cross-cutting validation utilities
+infrastructure/       # Database, messaging, external integrations
+models/              # Domain entities and business objects
 ```
 
 Directory names and organization **teach the architecture** without explicit documentation.
@@ -124,12 +137,12 @@ Directory names and organization **teach the architecture** without explicit doc
 ### Type-First Documentation
 ```typescript
 // This schema teaches AI the complete data model:
-export const NodeEntrySchema = zex.object({
-  type: NodeTypeSchema,      // Must be one of these enum values
-  metadata: MetadataSchema,  // Structure defined elsewhere  
-  tools: zex.array(ToolEntrySchema), // Array of this type
-  core: zex.any(),          // Implementation content
-  coreType: CoreTypeSchema, // Determines how core is interpreted
+export const UserSchema = z.object({
+  id: z.string().uuid(),           // Must be valid UUID
+  email: z.string().email(),       // Validated email format
+  roles: z.array(RoleSchema),      // Array of role definitions
+  profile: ProfileSchema,          // User profile data structure
+  createdAt: z.date(),            // Timestamp of account creation
 });
 ```
 
