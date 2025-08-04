@@ -34,60 +34,7 @@
   line-height: 1.7;
 }
 
-/* Philosophy Section */
-.philosophy-section {
-  margin-bottom: 4rem;
-}
 
-.philosophy-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.philosophy-card {
-  background-color: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: 1rem;
-  padding: 2rem;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.card-icon {
-  width: 4rem;
-  height: 4rem;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5rem;
-}
-
-.card-icon i {
-  font-size: 1.5rem;
-  color: white;
-  display: inline-block;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-}
-
-.philosophy-card h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 1rem 0;
-  color: #1a1a1a;
-}
-
-.philosophy-card p {
-  color: #6b7280;
-  line-height: 1.6;
-  margin: 0;
-}
 
 /* Content Sections */
 .content-section {
@@ -255,14 +202,7 @@
     max-height: 200px;
   }
   
-  .philosophy-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  
-  .philosophy-card {
-    padding: 1.5rem;
-  }
+
   
   .methodology-item {
     padding: 1rem;
