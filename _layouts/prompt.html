@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% if page.title %}{{ page.title }} - {% endif %}Martin Schlott - AI Inquisitor</title>
+  <meta property="og:title" content="{% if page.title %}{{ page.title }} - {% endif %}Martin Schlott - AI Inquisitor" />
+  <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}The first AI-Inquisitor. Exploring AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.{% endif %}" />
+  <meta property="og:image" content="{{ site.url }}/assets/og.jpg" />
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Martin Schlott - AI Inquisitor" />
+  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}The first AI-Inquisitor. Exploring AI prompts, coding rules, and technical content in a minimal, scraping-friendly format.{% endif %}" />
+  <meta name="author" content="Martin Schlott" />
+  <meta name="robots" content="index, follow" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="preload" href="/assets/avatar.png" as="image" />
+  <link rel="preload" href="/assets/og.jpg" as="image" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <header role="banner">
+    <div class="header-container">
+      <div class="header-text">
+        <h1 class="title">
+          <a href="/" style="text-decoration: none; color: inherit;">Martin Schlott</a>
+        </h1>
+        <p class="subtitle">The first AI-Inquisitor</p>
+      </div>
+      <a href="/">
+        <img src="/assets/avatar.png" alt="Martin Schlott" class="avatar" />
+      </a>
+    </div>
+    <hr class="divider" aria-hidden="true" />
+  </header>
+  <main id="main-content" class="main-content" role="main">
+    {{ content }}
+    <hr>
+    <nav class="prompt-nav">
+      <a href="/">← Back to Home</a>
+      {% if page.source_url or page.source or page.file or page.origin %}
+      • <a href="{{ page.source_url | default: page.source | default: page.file | default: page.origin }}" target="_blank">View Original File</a>
+      {% endif %}
+    </nav>
+  </main>
+  <footer role="contentinfo" class="footer">
+    <hr class="divider" aria-hidden="true" />
+    <p class="footer-text">
+      <a href="https://github.com/MartinSchlott" target="_blank" rel="noopener" aria-label="GitHub Profile">GitHub</a> •
+      <a href="https://ai-inquisitor.com/" target="_blank" rel="noopener" aria-label="AI Inquisitor Blog">Blog</a> •
+      <a href="https://x.com/AI_Inquisitor" target="_blank" rel="noopener" aria-label="Twitter Profile">@AI_Inquisitor</a>
+    </p>
+  </footer>
+  <script>
+    // Prompt Box JavaScript (wie vorher)
+    let originalRawContent = null;
+    function getOriginalRawContent() {
+      if (!originalRawContent) {
+        const content = document.getElementById('prompt-content');
+        if (content) {
+          originalRawContent = content.textContent;
+        }
+      }
+      return originalRawContent;
+    }
+    function togglePromptView() {
+      const content = document.getElementById('prompt-content');
+      const toggleBtn = document.querySelector('.toggle-btn');
+      if (!content || !toggleBtn) return;
+      if (content.classList.contains('raw-mode')) {
+        content.classList.remove('raw-mode');
+        content.classList.add('rendered-mode');
+        toggleBtn.textContent = 'Raw';
+        toggleBtn.classList.add('active');
+        const rawText = getOriginalRawContent();
+        content.innerHTML = renderMarkdown(rawText);
+      } else {
+        content.classList.remove('rendered-mode');
+        content.classList.add('raw-mode');
+        toggleBtn.textContent = 'Preview';
+        toggleBtn.classList.remove('active');
+        content.textContent = getOriginalRawContent();
+      }
+    }
+    function copyPromptContent() {
+      const content = document.getElementById('prompt-content');
+      if (!content) return;
+      const text = content.classList.contains('raw-mode') ?
+        getOriginalRawContent() : content.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const copyBtn = document.querySelector('.copy-btn');
+        if (copyBtn) {
+          const originalText = copyBtn.textContent;
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => {
+            copyBtn.textContent = originalText;
+          }, 2000);
+        }
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+    function downloadPromptContent() {
+      const content = document.getElementById('prompt-content');
+      if (!content) return;
+      const text = content.classList.contains('raw-mode') ?
+        getOriginalRawContent() : content.textContent;
+      const filename = '{{ page.slug | default: page.title | slugify }}.md';
+      const blob = new Blob([text], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    function renderMarkdown(text) {
+      return text
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/^- (.*$)/gim, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/^(.*$)/gim, '<p>$1</p>')
+        .replace(/<p><\/p>/g, '')
+        .replace(/<p>(<h[1-6]>.*<\/h[1-6]>)<\/p>/g, '$1')
+        .replace(/<p>(<ul>.*<\/ul>)<\/p>/g, '$1')
+        .replace(/<p>(<pre>.*<\/pre>)<\/p>/g, '$1');
+    }
+  </script>
+</body>
+</html>

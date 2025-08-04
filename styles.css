@@ -257,23 +257,25 @@ header {
   color: #dc2626;
 }
 
-.prompt-content.rendered-mode pre {
-  background-color: #1f2937;
-  color: #f9fafb;
-  padding: 1rem;
-  border-radius: 0.5rem;
+.prompt-content.rendered-mode pre, .prompt-content.rendered-mode pre code {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+  font-family: 'Fira Mono', 'Menlo', 'Monaco', monospace;
+  line-height: 1.4 !important;
+  padding: 1em;
+  border-radius: 8px;
   overflow-x: auto;
-  margin: 1rem 0;
-  line-height: 1.4;
+  margin: 1em 0;
+  font-size: 0.96em;
 }
 
 .prompt-content.rendered-mode pre code {
-  background-color: transparent;
+  background: none !important;
+  color: inherit !important;
   padding: 0;
-  color: #f9fafb;
-  font-size: 0.875rem;
-  line-height: 1.4;
+  border: none;
 }
+
 
 /* Back Link */
 .back-link {

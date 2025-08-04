@@ -4,38 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI-Native Documentation Philosophy - Martin Schlott - AI Inquisitor</title>
-  
-  <!-- Open Graph / Social Media Meta Tags -->
   <meta property="og:title" content="AI-Native Documentation Philosophy - Martin Schlott - AI Inquisitor" />
   <meta property="og:description" content="Understanding why AI-native documentation is fundamentally different from traditional docs. Raw markdown preserved for AI consumption." />
   <meta property="og:image" content="http://0.0.0.0:4000/assets/og.jpg" />
   <meta property="og:url" content="http://0.0.0.0:4000/prompts/ai-native-docs/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Martin Schlott - AI Inquisitor" />
-  
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="AI-Native Documentation Philosophy - Martin Schlott - AI Inquisitor" />
-  <meta name="twitter:description" content="Understanding why AI-native documentation is fundamentally different from traditional docs. Raw markdown preserved for AI consumption." />
-  <meta name="twitter:image" content="http://0.0.0.0:4000/assets/og.jpg" />
-  <meta name="twitter:creator" content="@AI_Inquisitor" />
-  
-  <!-- Additional Meta Tags -->
   <meta name="description" content="Understanding why AI-native documentation is fundamentally different from traditional docs. Raw markdown preserved for AI consumption." />
   <meta name="author" content="Martin Schlott" />
   <meta name="robots" content="index, follow" />
-  
-  <!-- Styles -->
   <link rel="stylesheet" href="/styles.css" />
-  
-  <!-- Preload critical assets -->
   <link rel="preload" href="/assets/avatar.png" as="image" />
   <link rel="preload" href="/assets/og.jpg" as="image" />
 </head>
 <body>
-  <!-- Skip to main content link for accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
-  
   <header role="banner">
     <div class="header-container">
       <div class="header-text">
@@ -50,7 +33,6 @@
     </div>
     <hr class="divider" aria-hidden="true" />
   </header>
-  
   <main id="main-content" class="main-content" role="main">
     <h1 id="ai-native-documentation-philosophy">AI-Native Documentation Philosophy</h1>
 
@@ -222,28 +204,27 @@ This approach transforms AI from a **code completion tool** into a **true archit
 The result: AI that doesn't just write code, but writes **the right code** that fits seamlessly into the existing system's philosophy and constraints.&lt;/div&gt;
 &lt;/div&gt;
 
-<p class="back-link">
-  <a href="/">← Back to Home</a> • 
-  <a href="/_rawmd/AIFirstCodeDocumentation.md" target="_blank">View Original File</a>
-</p> 
+<!-- Navigation links moved completely outside the prompt box and prompt-content for clean separation -->
+
 </ToolInvocationResult></div></div>
 
+    <hr>
+    <nav class="prompt-nav">
+      <a href="/">← Back to Home</a>
+      
+    </nav>
   </main>
-  
   <footer role="contentinfo" class="footer">
     <hr class="divider" aria-hidden="true" />
     <p class="footer-text">
-      <a href="https://github.com/MartinSchlott" target="_blank" rel="noopener" aria-label="GitHub Profile">GitHub</a> • 
-      <a href="https://ai-inquisitor.com/" target="_blank" rel="noopener" aria-label="AI Inquisitor Blog">Blog</a> • 
+      <a href="https://github.com/MartinSchlott" target="_blank" rel="noopener" aria-label="GitHub Profile">GitHub</a> •
+      <a href="https://ai-inquisitor.com/" target="_blank" rel="noopener" aria-label="AI Inquisitor Blog">Blog</a> •
       <a href="https://x.com/AI_Inquisitor" target="_blank" rel="noopener" aria-label="Twitter Profile">@AI_Inquisitor</a>
     </p>
   </footer>
-
-  <!-- Prompt Box JavaScript -->
   <script>
-    // Store original raw content
+    // Prompt Box JavaScript (wie vorher)
     let originalRawContent = null;
-    
     function getOriginalRawContent() {
       if (!originalRawContent) {
         const content = document.getElementById('prompt-content');
@@ -253,44 +234,30 @@ The result: AI that doesn't just write code, but writes **the right code** that 
       }
       return originalRawContent;
     }
-    
-    // Toggle between raw and rendered view
     function togglePromptView() {
       const content = document.getElementById('prompt-content');
       const toggleBtn = document.querySelector('.toggle-btn');
-      
       if (!content || !toggleBtn) return;
-      
       if (content.classList.contains('raw-mode')) {
-        // Switch to rendered mode
         content.classList.remove('raw-mode');
         content.classList.add('rendered-mode');
         toggleBtn.textContent = 'Raw';
         toggleBtn.classList.add('active');
-        
-        // Convert raw markdown to rendered HTML
         const rawText = getOriginalRawContent();
         content.innerHTML = renderMarkdown(rawText);
       } else {
-        // Switch back to raw mode
         content.classList.remove('rendered-mode');
         content.classList.add('raw-mode');
         toggleBtn.textContent = 'Preview';
         toggleBtn.classList.remove('active');
-        
-        // Restore original raw content
         content.textContent = getOriginalRawContent();
       }
     }
-    
-    // Copy content to clipboard
     function copyPromptContent() {
       const content = document.getElementById('prompt-content');
       if (!content) return;
-      
-      const text = content.classList.contains('raw-mode') ? 
+      const text = content.classList.contains('raw-mode') ?
         getOriginalRawContent() : content.textContent;
-      
       navigator.clipboard.writeText(text).then(() => {
         const copyBtn = document.querySelector('.copy-btn');
         if (copyBtn) {
@@ -304,19 +271,14 @@ The result: AI that doesn't just write code, but writes **the right code** that 
         console.error('Failed to copy: ', err);
       });
     }
-    
-    // Download content as markdown file
     function downloadPromptContent() {
       const content = document.getElementById('prompt-content');
       if (!content) return;
-      
-      const text = content.classList.contains('raw-mode') ? 
+      const text = content.classList.contains('raw-mode') ?
         getOriginalRawContent() : content.textContent;
-      
-      const filename = 'ai-native-docs.md';
+      const filename = 'ai-native-documentation-philosophy.md';
       const blob = new Blob([text], { type: 'text/markdown' });
       const url = URL.createObjectURL(blob);
-      
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
@@ -325,29 +287,19 @@ The result: AI that doesn't just write code, but writes **the right code** that 
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
-    
-    // Simple markdown renderer (basic implementation)
     function renderMarkdown(text) {
       return text
-        // Headers
         .replace(/^### (.*$)/gim, '<h3>$1</h3>')
         .replace(/^## (.*$)/gim, '<h2>$1</h2>')
         .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-        // Bold
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        // Italic
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        // Code blocks
         .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-        // Inline code
         .replace(/`([^`]+)`/g, '<code>$1</code>')
-        // Lists
         .replace(/^- (.*$)/gim, '<li>$1</li>')
         .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-        // Paragraphs
         .replace(/\n\n/g, '</p><p>')
         .replace(/^(.*$)/gim, '<p>$1</p>')
-        // Clean up empty paragraphs
         .replace(/<p><\/p>/g, '')
         .replace(/<p>(<h[1-6]>.*<\/h[1-6]>)<\/p>/g, '$1')
         .replace(/<p>(<ul>.*<\/ul>)<\/p>/g, '$1')

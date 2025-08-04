@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: prompt
 title: AI-Native Documentation Philosophy
 description: "Understanding why AI-native documentation is fundamentally different from traditional docs. Raw markdown preserved for AI consumption."
 ---
@@ -174,7 +174,5 @@ This approach transforms AI from a **code completion tool** into a **true archit
 The result: AI that doesn't just write code, but writes **the right code** that fits seamlessly into the existing system's philosophy and constraints.</div>
 </div>
 
-<p class="back-link">
-  <a href="/">← Back to Home</a> • 
-  <a href="/_rawmd/AIFirstCodeDocumentation.md" target="_blank">View Original File</a>
-</p> 
+<!-- Navigation links moved completely outside the prompt box and prompt-content for clean separation -->
+
